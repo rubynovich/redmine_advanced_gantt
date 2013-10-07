@@ -1,15 +1,15 @@
-- html_title "advancedGanttPlugin"
+- html_title l("html_title")
 
 - content_for :header_tags do
   //= include_gon(:namespace => 'gant_data') %>
-  = javascript_include_tag 'dhtmlxgantt', :plugin => :advanced_gantt
-  = javascript_include_tag 'locale_ru', :plugin => :advanced_gantt
-  = stylesheet_link_tag 'dhtmlxgantt', :plugin => :advanced_gantt
-  //= stylesheet_link_tag 'dhtmlxgantt_skyblue', :plugin => :advanced_gantt
+  = javascript_include_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
+  = javascript_include_tag 'locale_ru', :plugin => :redmine_advanced_gantt
+  = stylesheet_link_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
+  //= stylesheet_link_tag 'dhtmlxgantt_skyblue', :plugin => :redmine_advanced_gantt
   = csrf_meta_tag
 - @gantt.view = self
 %h2= @query.new_record? ? l(:label_gantt) : h(@query.name)
-= form_tag({:controller => 'redmine_gantt', :action => 'index', :project_id => @project, :month => params[:month], :year => params[:year], :months => params[:months]}, :method => :get, :id => 'query_form') do              |
+= form_tag({:controller => 'advanced_gantt_project', :action => 'index', :project_id => @project, :month => params[:month], :year => params[:year], :months => params[:months]}, :method => :get, :id => 'query_form') do              |
   = hidden_field_tag 'set_filter', '1'
   %fieldset#filters{:class => "collapsible #{@query.new_record? ? "" : "collapsed"}"}
     %legend{:onclick => "toggleFieldset(this);"}= l(:label_filter_plural)
@@ -69,6 +69,6 @@
   $(document).ready(function(){
   gantt.config.sort = true;
   gantt.init("gantt_here");
-  //gantt.parse(tasks);
+  gantt.parse(tasks);
   })
 
