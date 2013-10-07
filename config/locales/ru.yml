@@ -1,0 +1,5 @@
+# Russian strings go here for Rails i18n
+ru:
+  permission_view_advanced_gantt: "Показать Гантт диаграмму"
+  project_module_advanced_gantt: "Гантт нов."
+  advanced_gantt: "Гантт нов."

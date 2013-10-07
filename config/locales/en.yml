@@ -1,3 +1,5 @@
 # English strings go here for Rails i18n
 en:
-  # my_label: "My label"
+  permission_view_advanced_gantt: "View Advanced Gantt Chart"
+  project_module_advanced_gantt: "Advanced Gantt"
+  advanced_gantt: "Advanced Gantt"
