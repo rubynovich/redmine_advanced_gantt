@@ -4,6 +4,9 @@ gem 'rabl'
 gem 'gon'
 gem 'haml'
 gem 'haml-rails'
+
+gem 'draper'
+
 #gem 'erb2haml'
 #gem 'rubyzip', '= 0.9.9'
 #gem 'websocket', '= 1.0.7'

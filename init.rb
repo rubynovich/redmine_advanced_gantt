@@ -12,3 +12,9 @@ Redmine::Plugin.register :redmine_advanced_gantt do
   end
   menu :project_menu, :advanced_gantt, { :controller => :advanced_gantt_project, :action => :index }, :caption => :advanced_gantt, :after => :new_issue
 end
+
+require 'concerns/decorators'
+
+[:project, :issue, :version].each do |decorator|
+  require "decorators/#{decorator}_decorator"
+end

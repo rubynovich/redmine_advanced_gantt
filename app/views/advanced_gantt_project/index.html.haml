@@ -1,13 +1,12 @@
 - html_title l("html_title")
-
+- @gantt.view = self
 - content_for :header_tags do
-  //= include_gon(:namespace => 'gant_data') %>
   = javascript_include_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
   = javascript_include_tag 'locale_ru', :plugin => :redmine_advanced_gantt
   = stylesheet_link_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
   //= stylesheet_link_tag 'dhtmlxgantt_skyblue', :plugin => :redmine_advanced_gantt
+  = include_gon
   = csrf_meta_tag
-- @gantt.view = self
 %h2= @query.new_record? ? l(:label_gantt) : h(@query.name)
 = form_tag({:controller => 'advanced_gantt_project', :action => 'index', :project_id => @project, :month => params[:month], :year => params[:year], :months => params[:months]}, :method => :get, :id => 'query_form') do              |
   = hidden_field_tag 'set_filter', '1'
@@ -66,9 +65,11 @@
   //- @gantt.render(:top => headers_height + 8, :zoom => zoom, :g_width => g_width, :subject_width => subject_width)
 %div{id: "gantt_here", style: 'width:100%; min-height: 400px;'} &nbsp;
 = javascript_tag do
+  var tasks = gon.data_gantt
   $(document).ready(function(){
   gantt.config.sort = true;
   gantt.init("gantt_here");
+  console.log(tasks);
   gantt.parse(tasks);
   })
 
