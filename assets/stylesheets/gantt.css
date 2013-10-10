@@ -1,0 +1,15 @@
+.gantt_task_line{
+    opacity: 0.8;
+}
+.gantt_task_line.project{
+     background: #3576cc;
+}
+
+.gantt_task_line.project .gantt_task_progress{
+    background: #c1cc4d !important;
+}
+
+
+.gantt_task_line.version .gantt_task_content{
+    background: #c6cc37 !important;
+}

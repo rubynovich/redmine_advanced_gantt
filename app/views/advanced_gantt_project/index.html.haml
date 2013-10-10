@@ -3,7 +3,9 @@
 - content_for :header_tags do
   = javascript_include_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
   = javascript_include_tag 'locale_ru', :plugin => :redmine_advanced_gantt
+  = javascript_include_tag 'gantt', :plugin => :redmine_advanced_gantt
   = stylesheet_link_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
+  = stylesheet_link_tag 'gantt', :plugin => :redmine_advanced_gantt
   //= stylesheet_link_tag 'dhtmlxgantt_skyblue', :plugin => :redmine_advanced_gantt
   = include_gon
   = csrf_meta_tag
@@ -35,9 +37,24 @@
               %label
                 = check_box_tag "draw_progress_line", params[:draw_progress_line], params[:draw_progress_line]
                 = l(:label_display)
-  %p.contextual
-    = gantt_zoom_link(@gantt, :in)
-    = gantt_zoom_link(@gantt, :out)
+  %p.contextual.gantt-zoom-tasks-inputs
+    %label
+      = radio_button_tag 'scales', 'week'
+      Часы
+    %label
+      = radio_button_tag 'scales', 'trplweek', true
+      Дни
+    %label
+      = radio_button_tag 'scales', 'month'
+      Недели
+    %label
+      = radio_button_tag 'scales', 'year'
+      Месяцы
+    %label
+      = radio_button_tag 'scales', 'years'
+      Года
+    //= gantt_zoom_link(@gantt, :in)
+    //= gantt_zoom_link(@gantt, :out)
   %p.buttons
     = text_field_tag 'months', @gantt.months, :size => 2
     = l(:label_months_from)
@@ -49,27 +66,19 @@
 = error_messages_for 'query'
 - if @query.valid?
   - zoom = 1
-  - @gantt.zoom.times { zoom = zoom * 2 }
-  - subject_width = 330
-  - header_height = 18
-  - headers_height = header_height
-  - show_weeks = false
-  - show_days  = false
-  - if @gantt.zoom > 1
-    - show_weeks = true
-    - headers_height = 2 * header_height
-    - if @gantt.zoom > 2
-      - show_days = true
-      - headers_height = 3 * header_height
-  - g_width = ((@gantt.date_to - @gantt.date_from + 1) * zoom).to_i
+  //- @gantt.zoom.times { zoom = zoom * 2 }
+  //- subject_width = 330
+  //- header_height = 18
+  //- headers_height = header_height
+  //- show_weeks = false
+  //- show_days  = false
+  //- if @gantt.zoom > 1
+  //  - show_weeks = true
+  //  - headers_height = 2 * header_height
+  //  - if @gantt.zoom > 2
+  //    - show_days = true
+  //    - headers_height = 3 * header_height
+  //- g_width = ((@gantt.date_to - @gantt.date_from + 1) * zoom).to_i
   //- @gantt.render(:top => headers_height + 8, :zoom => zoom, :g_width => g_width, :subject_width => subject_width)
 %div{id: "gantt_here", style: 'width:100%; min-height: 400px;'} &nbsp;
-= javascript_tag do
-  var tasks = gon.data_gantt
-  $(document).ready(function(){
-  gantt.config.sort = true;
-  gantt.init("gantt_here");
-  console.log(tasks);
-  gantt.parse(tasks);
-  })
 

@@ -16,25 +16,41 @@ class AdvancedGanttProjectController < ApplicationController
   helper ActionView::Helpers::UrlHelper
 
   def index
-    #raise @project.inspect
     @gantt = Redmine::Helpers::Gantt.new(params)
     @gantt.project = @project
-
     retrieve_query
     @query.group_by = nil
     @gantt.query = @query if @query.valid?
     basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
-    #data = []
-    @data_gantt ||= []#{data: [], links: []}
+    @data_gantt ||= []
     @links_gantt ||= []
-    #raise @gantt.projects.inspect
     Project.project_tree(@gantt.projects) do |project, level|
       add_project(project, {:level => level})
-      #break if abort?
     end
-    gon.data_gantt = {data: @data_gantt, links: @links_gantt}
-    #@gantt.render
-    #gon.rabl "#{Rails.root}/plugins/redmine_advanced_gantt/app/views/advanced_gantt_project/index.json.rabl"
+    #@data_gantt_ids = {}
+    #@data_gantt_reverse_ids = {}
+    #i = 0
+    #@data_gantt.each do |item|
+    #  if @data_gantt_ids[item[:id]].nil?
+    #    i += 1
+    #    @data_gantt_ids[item[:id]] = i
+    #    @data_gantt_reverse_ids[i.to_s] = item[:id]
+    #    item[:id] = i
+    #  end
+    #  item[:parent] = @data_gantt_ids[item[:parent]]
+    #end
+
+
+    data_one = [
+
+        {"id" => 161, "text" => "<a href=\"/projects/generas\">&quot;Одиннадцатый участок &quot; (Румянцево)</a>", "progress" =>  0.4, "open" =>  false, "priority" => 0, "project" => 1 },
+
+        {"id" => 2, "text" => "Office facing", "start_date" => "02-04-2013", "duration" => "8", "progress" => 0.5, "parent" => 161, "open" =>  false},
+       # {"id":3, "text":"Furniture installation", "start_date":"11-04-2013", "duration":"8", "order":"20", "parent":"1", "progress": 0.6, "open": true, "priority":1 },
+       # {"id":4, "text":"The employee relocation", "start_date":"13-04-2013", "duration":"6", "order":"30", "parent":"1", "progress": 0.5, "open": true, "priority":1 },
+    ]
+
+    gon.data_gantt = {data: @data_gantt, links: @links_gantt, data_one: @data_gantt }
     respond_to do |format|
       format.html {
         render :layout => !request.xhr?
@@ -49,33 +65,20 @@ class AdvancedGanttProjectController < ApplicationController
   def add_project(project, options={})
 
     item = {
-        #id: "p#{project.id}",
-        id: project.id,
+        id: "p#{project.id}",
         text: view_context.link_to_project(project).html_safe,
         project:1,
-        open: project.status == '1', #options[:level] == 1 ? 1 : 0,
+        open: true,
+        #open: project.status == '1', #options[:level] == 1 ? 1 : 0,
         progress: project.completed_percent / 100,
         start_date: project.decorate.start_at,
         duration: project.decorate.duration
-        #send_date: project.start_date,
-        #duration: 20
     }
     item[:parent] = "p#{project.parent.id}" if project.parent.present?
 
     @data_gantt << item
 
-    #item[:start_date] = project.start_date if project.start_date
-
-
-    #subject_for_project(project, options) unless options[:only] == :lines
-    #line_for_project(project, options) unless options[:only] == :subjects
-    #options[:top] += options[:top_increment]
-    #options[:indent] += options[:indent_increment]
-    #@number_of_rows += 1
-    #return if abort?
     issues = @gantt.project_issues(project).select {|i| i.fixed_version.nil?}
-
-    #item.merge!({ , due_date: project.due_date})
 
 
     sort_issues!(issues)
@@ -87,8 +90,7 @@ class AdvancedGanttProjectController < ApplicationController
     versions.each do |version|
       add_version(project, version, options)
     end
-    # Remove indent to hit the next sibling
-    #options[:indent] -= options[:indent_increment]
+
   end
 
   def add_issues(issues, options={})
@@ -96,29 +98,23 @@ class AdvancedGanttProjectController < ApplicationController
     add_version = "v#{options[version.id]}" if options[:version]
     issues.each do |issue|
       item = {
-          #id: "i#{issue.id}#{add_version}",
-          id: issue.id,
+          id: "i#{issue.id}#{add_version}",
+          #id: issue.id,
           text: view_context.link_to_issue(issue),
-          #parent: issue.parent.nil? ? (options[:version] ? "v#{options[:version].id}" : "p#{issue.project.id}") : "i#{issue.id}#{add_version}",
-          parent: issue.parent.nil? ? issue.project.id : issue.id,
+          parent: issue.parent.nil? ? (options[:version] ? "v#{options[:version].id}" : "p#{issue.project.id}") : "i#{issue.parent.id}#{add_version}",
+          #parent: issue.parent.nil? ? issue.project.id : issue.parent.id,
           issue: 1,
+          open: true,
           closed_on: issue.closed_on,
           is_private: issue.is_private,
           priority: issue.priority_id,
           start_date: issue.decorate.start_at,
           duration: issue.decorate.duration,
           progress: issue.done_ratio / 10,
-          #due_date: issue.due_date,
-          #completed_percent: issue.completed_percent
+
       }
       @data_gantt << item
-      #subject_for_issue(i, options) unless options[:only] == :lines
-      #line_for_issue(i, options) unless options[:only] == :subjects
-      #options[:top] += options[:top_increment]
-      #@number_of_rows += 1
-      #break if abort?
     end
-    #options[:indent] -= (options[:indent_increment] * @issue_ancestors.size)
   end
 
   def add_version(project, version, options={})
@@ -129,28 +125,20 @@ class AdvancedGanttProjectController < ApplicationController
           id: "v#{version}",
           text: view_context.link_to_version(version).html_safe,
           version:1,
-          project:1,
           parent: "p#{project.id}",
-          open: version.status == 'open',#options[:level] == 1 ? 1 : 0,
+          open: true,
+          #open: version.status == 'open',#options[:level] == 1 ? 1 : 0,
           start_date: version.decorate.start_at,
           duration: version.decorate.duration,
           progress: version.completed_percent / 100
       }
       @data_gantt << item
-      # Version header
-      #subject_for_version(version, options) unless options[:only] == :lines
-      #line_for_version(version, options) unless options[:only] == :subjects
-      #options[:top] += options[:top_increment]
-      #@number_of_rows += 1
-      #return if abort?
+
       issues = version_issues(project, version)
       if issues
         sort_issues!(issues)
-        # Indent issues
-        #options[:indent] += options[:indent_increment]
         options[:version] = version
         add_issues(issues, options)
-        #options[:indent] -= options[:indent_increment]
       end
     end
   end
