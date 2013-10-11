@@ -15,6 +15,6 @@ end
 
 require 'concerns/decorators'
 
-[:project, :issue, :version].each do |decorator|
+[:project, :issue, :version, :issue_relation].each do |decorator|
   require "decorators/#{decorator}_decorator"
 end

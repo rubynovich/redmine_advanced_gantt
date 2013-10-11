@@ -66,13 +66,31 @@ $(document).ready(function(){
     });
 
     gantt.templates.scale_cell_class = function(date){
+        var today = new Date()
         if(date.getDay()==0||date.getDay()==6){
-            return "weekend";
+            if (date <= today){
+                return "weekend_past_simple"
+            } else {
+                return "weekend" ;
+            }
+        } else{
+            if (date <= today){
+                return "past_simple"
+            }
         }
     };
     gantt.templates.task_cell_class = function(item,date){
+        var today = new Date()
         if(date.getDay()==0||date.getDay()==6){
-            return "weekend" ;
+            if (date <= today){
+                return "weekend_past_simple"
+            } else {
+                return "weekend" ;
+            }
+        } else{
+            if (date <= today){
+                return "past_simple"
+            }
         }
     };
 
@@ -95,6 +113,20 @@ $(document).ready(function(){
             return ""
         }
     }
+    function modHeight(){
+        var headHeight = 122;
+
+        var sch = document.getElementById("gantt_here");
+        sch.style.height = (tasks['data'].length * (gantt.config.scale_height+2))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
+        //var contbox = document.getElementById("contbox");
+        //contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
+
+        gantt.setSizes();
+    }
+
     gantt.init("gantt_here");
+    modHeight();
+    console.log(tasks["links"])
     gantt.parse(tasks);
+
 })

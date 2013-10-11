@@ -13,3 +13,8 @@
 .gantt_task_line.version .gantt_task_content{
     background: #c6cc37 !important;
 }
+
+.weekend{ background: #f7f2f3 !important;}
+
+.weekend_past_simple{ background: #f7ece7 !important;}
+.past_simple{ background: #e3f0f7 !important;}

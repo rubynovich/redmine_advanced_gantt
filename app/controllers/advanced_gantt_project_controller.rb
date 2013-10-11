@@ -23,7 +23,8 @@ class AdvancedGanttProjectController < ApplicationController
     @gantt.query = @query if @query.valid?
     basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
     @data_gantt ||= []
-    @links_gantt ||= []
+    #@links_gantt ||= []
+    @links_hash ||= {}
     Project.project_tree(@gantt.projects) do |project, level|
       add_project(project, {:level => level})
     end
@@ -40,17 +41,18 @@ class AdvancedGanttProjectController < ApplicationController
     #  item[:parent] = @data_gantt_ids[item[:parent]]
     #end
 
+    #Project
 
-    data_one = [
-
-        {"id" => 161, "text" => "<a href=\"/projects/generas\">&quot;Одиннадцатый участок &quot; (Румянцево)</a>", "progress" =>  0.4, "open" =>  false, "priority" => 0, "project" => 1 },
-
-        {"id" => 2, "text" => "Office facing", "start_date" => "02-04-2013", "duration" => "8", "progress" => 0.5, "parent" => 161, "open" =>  false},
+    #data_one = [
+    #
+    #    {"id" => 161, "text" => "<a href=\"/projects/generas\">&quot;Одиннадцатый участок &quot; (Румянцево)</a>", "progress" =>  0.4, "open" =>  false, "priority" => 0, "project" => 1 },
+    #
+    #    {"id" => 2, "text" => "Office facing", "start_date" => "02-04-2013", "duration" => "8", "progress" => 0.5, "parent" => 161, "open" =>  false},
        # {"id":3, "text":"Furniture installation", "start_date":"11-04-2013", "duration":"8", "order":"20", "parent":"1", "progress": 0.6, "open": true, "priority":1 },
        # {"id":4, "text":"The employee relocation", "start_date":"13-04-2013", "duration":"6", "order":"30", "parent":"1", "progress": 0.5, "open": true, "priority":1 },
-    ]
+    #]
 
-    gon.data_gantt = {data: @data_gantt, links: @links_gantt, data_one: @data_gantt }
+    gon.data_gantt = {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
     respond_to do |format|
       format.html {
         render :layout => !request.xhr?
@@ -70,9 +72,10 @@ class AdvancedGanttProjectController < ApplicationController
         project:1,
         open: true,
         #open: project.status == '1', #options[:level] == 1 ? 1 : 0,
-        progress: project.completed_percent / 100,
+        progress: (project.completed_percent(:include_subprojects => true) / 100),
         start_date: project.decorate.start_at,
-        duration: project.decorate.duration
+        duration: project.decorate.duration,
+        scale_height: 20
     }
     item[:parent] = "p#{project.parent.id}" if project.parent.present?
 
@@ -110,10 +113,22 @@ class AdvancedGanttProjectController < ApplicationController
           priority: issue.priority_id,
           start_date: issue.decorate.start_at,
           duration: issue.decorate.duration,
-          progress: issue.done_ratio / 10,
+          progress: (issue.done_ratio / 100),
 
       }
       @data_gantt << item
+      issue.relations.each do |relation|
+        if @links_hash["id#{relation.id}"].nil?
+          @links_hash["id#{relation.id}"] = {
+              id: relation.id,
+              source: relation.decorate.back ? "i#{relation.issue_to_id}#{add_version}" : "i#{relation.issue_from_id}#{add_version}",
+              target: relation.decorate.back ? "i#{relation.issue_from_id}#{add_version}" : "i#{relation.issue_to_id}#{add_version}",
+              type: relation.decorate.type,
+              redmine_type: relation.relation_type
+          }
+        end
+      end
+        #
     end
   end
 
