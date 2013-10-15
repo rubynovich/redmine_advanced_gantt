@@ -110,6 +110,16 @@ $(document).ready(function(){
         if(obj.project){
             return "project"
         } else {
+            if (obj.version){
+                return "version"
+            } else {
+
+              var statuses = ["new","in_progress", "solved", "callback", "closed", "rejected", "agreed", "canceled"]
+
+              if (statuses[obj.status-1]){
+                  return statuses[obj.status-1]+"_issue"
+              }
+            }
             return ""
         }
     }

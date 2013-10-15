@@ -8,6 +8,82 @@
 .gantt_task_line.project .gantt_task_progress{
     background: #c1cc4d !important;
 }
+/* new issue */
+.gantt_task_line.new_issue{
+    background: #89e4fa;
+}
+
+.gantt_task_line.new_issue .gantt_task_progress{
+    background: #71bed4 !important;
+}
+
+/* in progress issue */
+.gantt_task_line.in_progress_issue{
+    background: #f1f741;
+}
+
+.gantt_task_line.in_progress_issue .gantt_task_progress{
+    background: #c1cc4d !important;
+}
+/* callback issue */
+.gantt_task_line.callback_issue{
+    background: #f78350;
+}
+
+.gantt_task_line.callback_issue .gantt_task_progress{
+    background: #b45d3a !important;
+}
+
+/* rejected issue */
+.gantt_task_line.rejected_issue{
+    background: #f70000;
+}
+
+.gantt_task_line.rejected_issue .gantt_task_progress{
+    background: #940a00 !important;
+}
+
+/* agreed issue */
+.gantt_task_line.agreed_issue{
+    background: #106b00;
+}
+
+.gantt_task_line.agreed_issue .gantt_task_progress{
+    background: #0f4600 !important;
+}
+
+/* canceled issue */
+.gantt_task_line.canceled_issue{
+    background: #d3d3d3;
+}
+
+.gantt_task_line.canceled_issue .gantt_task_progress{
+    background: #b4b4b4 !important;
+}
+
+.gantt_tooltip{
+    /*position: fixed !important;*/
+}
+
+/* solved issue */
+.gantt_task_line.solved_issue{
+    background: #2ef700;
+}
+
+.gantt_task_line.solved_issue .gantt_task_progress{
+    background: #26c100 !important;
+}
+
+/* closed issue */
+.gantt_task_line.closed_issue{
+    background: #828282;
+}
+
+.gantt_task_line.closed_issue .gantt_task_progress{
+    background: #4a4a4a !important;
+}
+
+
 
 
 .gantt_task_line.version .gantt_task_content{
