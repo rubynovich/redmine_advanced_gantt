@@ -105,7 +105,7 @@ $(document).ready(function(){
 
     gantt.config.sort = true;
 
-    console.log(tasks);
+
     gantt.templates.task_class = function(start, end, obj){
         if(obj.project){
             return "project"
@@ -130,7 +130,7 @@ $(document).ready(function(){
         sch.style.height = (tasks['data'].length * (gantt.config.scale_height+2))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
         //var contbox = document.getElementById("contbox");
         //contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
-
+        //sch.style.height = (parseInt(document.body.offsetHeight)-headHeight)+"px";
         gantt.setSizes();
     }
 
@@ -148,11 +148,15 @@ $(document).ready(function(){
     };
     gantt.config.tooltip_timeout = 500;
     gantt.config.sort = true;
-
+    gantt.config.show_progress = true;
     gantt.init("gantt_here");
     modHeight();
-    console.log(tasks["links"])
-    gantt.parse(tasks);
+    //console.log(tasks)
+    gantt.parse(tasks)
+    //gantt.load('gantt.js');
     //x$("table").colResizable();
+    //$.each(tasks["data"], function(i, val){
+    //    gantt.addTask(val)
+    //})
 
 })

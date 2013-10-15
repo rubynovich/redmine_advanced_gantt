@@ -41,21 +41,15 @@ class AdvancedGanttProjectController < ApplicationController
     #  item[:parent] = @data_gantt_ids[item[:parent]]
     #end
 
-    #Project
-
-    #data_one = [
-    #
-    #    {"id" => 161, "text" => "<a href=\"/projects/generas\">&quot;Одиннадцатый участок &quot; (Румянцево)</a>", "progress" =>  0.4, "open" =>  false, "priority" => 0, "project" => 1 },
-    #
-    #    {"id" => 2, "text" => "Office facing", "start_date" => "02-04-2013", "duration" => "8", "progress" => 0.5, "parent" => 161, "open" =>  false},
-       # {"id":3, "text":"Furniture installation", "start_date":"11-04-2013", "duration":"8", "order":"20", "parent":"1", "progress": 0.6, "open": true, "priority":1 },
-       # {"id":4, "text":"The employee relocation", "start_date":"13-04-2013", "duration":"6", "order":"30", "parent":"1", "progress": 0.5, "open": true, "priority":1 },
-    #]
-
-    gon.data_gantt = {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
     respond_to do |format|
       format.html {
+        gon.data_gantt = {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
+        #gon.data_gantt = {data: @data_gantt[0..0], links:[]}
         render :layout => !request.xhr?
+      }
+      format.js {
+        render json: {data: @data_gantt, links: []}
+        #render json: {data: @data_gantt[1..10], links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
       }
       #format.png  { send_data(@gantt.to_image, :disposition => 'inline', :type => 'image/png', :filename => "#{basename}.png") } if @gantt.respond_to?('to_image')
       #format.pdf  { send_data(@gantt.to_pdf, :type => 'application/pdf', :filename => "#{basename}.pdf") }
@@ -102,6 +96,7 @@ class AdvancedGanttProjectController < ApplicationController
     @issue_ancestors = []
     add_version = "v#{options[version.id]}" if options[:version]
     issues.each do |issue|
+
       item = {
           id: "i#{issue.id}#{add_version}",
           priority: issue.level+issue.project.level+1,

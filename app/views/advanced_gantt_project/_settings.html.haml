@@ -1,0 +1,7 @@
+- @settings = {} unless @settings
+%p
+  %label= l(:label_minimal_date)
+  = text_field_tag "settings[minimal_date]", @settings[:minimal_date], :size => 10, :required => true
+  = calendar_for('settings_minimal_date')
+
+

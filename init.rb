@@ -6,7 +6,7 @@ Redmine::Plugin.register :redmine_advanced_gantt do
   url 'https://bitbucket.org/gorkapstroy/redmine_advanced_gantt'
   author_url 'http://maksim.koritskiy.ru'
   requires_redmine :version_or_higher => '2.0.3'
-
+  settings :partial => 'advanced_gantt_project/settings'
   project_module :advanced_gantt do
     permission :view_advanced_gantt, :advanced_gantt_project => :index
   end
