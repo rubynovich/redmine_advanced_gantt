@@ -124,9 +124,25 @@ $(document).ready(function(){
         gantt.setSizes();
     }
 
+    gantt.config.task_height = 14;
+    gantt.config.row_height = 17;
+    gantt.config.scale_height = 17;
+    gantt.config.link_arrow_size = 8;
+    gantt.config.columns=[
+        {name:"text", label:"Задачи",  tree:true, width:'*' },
+        {name: 'start_date', label: 'Дата начала'}
+    ]
+
+    gantt.templates.tooltip_text = function(start,end,task){
+        return task.tooltip ? task.tooltip : task.text;
+    };
+    gantt.config.tooltip_timeout = 500;
+    gantt.config.sort = true;
+
     gantt.init("gantt_here");
     modHeight();
     console.log(tasks["links"])
     gantt.parse(tasks);
+    //x$("table").colResizable();
 
 })

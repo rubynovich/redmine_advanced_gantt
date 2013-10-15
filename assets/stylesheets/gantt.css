@@ -11,10 +11,15 @@
 
 
 .gantt_task_line.version .gantt_task_content{
-    background: #c6cc37 !important;
+    background: #c6cc37 !important;  opacity: 0.8;
 }
 
-.weekend{ background: #f7f2f3 !important;}
+.weekend{ background: #f7f2f3 !important; opacity: 0.8;}
 
 .weekend_past_simple{ background: #f7ece7 !important;}
-.past_simple{ background: #e3f0f7 !important;}
+.past_simple{ background: #e3f0f7 !important; opacity: 0.8;}
+
+.gantt_hor_scroll{
+    position: fixed;
+    bottom: 0px;
+}

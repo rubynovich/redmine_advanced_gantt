@@ -70,6 +70,7 @@ class AdvancedGanttProjectController < ApplicationController
         id: "p#{project.id}",
         text: view_context.link_to_project(project).html_safe,
         project:1,
+        priority: project.level,
         open: true,
         #open: project.status == '1', #options[:level] == 1 ? 1 : 0,
         progress: (project.completed_percent(:include_subprojects => true) / 100),
@@ -102,8 +103,10 @@ class AdvancedGanttProjectController < ApplicationController
     issues.each do |issue|
       item = {
           id: "i#{issue.id}#{add_version}",
+          priority: issue.level+issue.project.level+1,
           #id: issue.id,
           text: view_context.link_to_issue(issue),
+          rightside_text: view_context.link_to_issue(issue),
           parent: issue.parent.nil? ? (options[:version] ? "v#{options[:version].id}" : "p#{issue.project.id}") : "i#{issue.parent.id}#{add_version}",
           #parent: issue.parent.nil? ? issue.project.id : issue.parent.id,
           issue: 1,
@@ -114,6 +117,8 @@ class AdvancedGanttProjectController < ApplicationController
           start_date: issue.decorate.start_at,
           duration: issue.decorate.duration,
           progress: (issue.done_ratio / 100),
+          tooltip: %{#{view_context.render_issue_tooltip(issue).html_safe}<br>
+          }.html_safe
 
       }
       @data_gantt << item
