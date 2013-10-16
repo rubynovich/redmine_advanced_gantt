@@ -140,7 +140,7 @@ $(document).ready(function(){
     gantt.config.link_arrow_size = 8;
     gantt.config.columns=[
         {name:"text", label:"Задачи",  tree:true, width:'*' },
-        {name: 'start_date', label: 'Дата начала'}
+        {name: 'start_date', label: 'Дата начала', width: '60px'}
     ]
 
     gantt.templates.tooltip_text = function(start,end,task){
@@ -151,10 +151,9 @@ $(document).ready(function(){
     gantt.config.show_progress = true;
     gantt.init("gantt_here");
     modHeight();
-    //console.log(tasks)
     gantt.parse(tasks)
     //gantt.load('gantt.js');
-    //x$("table").colResizable();
+    //$(".table").colResizable();
     //$.each(tasks["data"], function(i, val){
     //    gantt.addTask(val)
     //})
