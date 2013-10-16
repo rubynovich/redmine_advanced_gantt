@@ -10,20 +10,20 @@
 }
 /* new issue */
 .gantt_task_line.new_issue{
-    background: #89e4fa;
+    background: #1e90ff;
 }
 
 .gantt_task_line.new_issue .gantt_task_progress{
-    background: #71bed4 !important;
+    background: #1a6ec7 !important;
 }
 
 /* in progress issue */
 .gantt_task_line.in_progress_issue{
-    background: #f1f741;
+    background: #ffdead;
 }
 
 .gantt_task_line.in_progress_issue .gantt_task_progress{
-    background: #c1cc4d !important;
+    background: #c3a784 !important;
 }
 /* callback issue */
 .gantt_task_line.callback_issue{
@@ -36,29 +36,29 @@
 
 /* rejected issue */
 .gantt_task_line.rejected_issue{
-    background: #f70000;
+    background: #cd0000;
 }
 
 .gantt_task_line.rejected_issue .gantt_task_progress{
-    background: #940a00 !important;
+    background: #9b0000 !important;
 }
 
 /* agreed issue */
 .gantt_task_line.agreed_issue{
-    background: #106b00;
+    background: #556b2f;
 }
 
 .gantt_task_line.agreed_issue .gantt_task_progress{
-    background: #0f4600 !important;
+    background: #3c4f26 !important;
 }
 
 /* canceled issue */
 .gantt_task_line.canceled_issue{
-    background: #d3d3d3;
+    background: #bebebe;
 }
 
 .gantt_task_line.canceled_issue .gantt_task_progress{
-    background: #b4b4b4 !important;
+    background: #9d9d9d !important;
 }
 
 .gantt_tooltip{
@@ -67,20 +67,20 @@
 
 /* solved issue */
 .gantt_task_line.solved_issue{
-    background: #2ef700;
+    background: #2e8b57;
 }
 
 .gantt_task_line.solved_issue .gantt_task_progress{
-    background: #26c100 !important;
+    background: #24693f !important;
 }
 
 /* closed issue */
 .gantt_task_line.closed_issue{
-    background: #828282;
+    background: #8b8682;
 }
 
 .gantt_task_line.closed_issue .gantt_task_progress{
-    background: #4a4a4a !important;
+    background: #67625e !important;
 }
 
 
@@ -92,10 +92,19 @@
 
 .weekend{ background: #f7f2f3 !important; opacity: 0.8;}
 
-.weekend_past_simple{ background: #f7ece7 !important;}
+.weekend.past_simple{ background: #f7ece7 !important;}
 .past_simple{ background: #e3f0f7 !important; opacity: 0.8;}
+
 
 .gantt_hor_scroll{
     position: fixed;
     bottom: 0px;
+}
+
+.gantt_side_content.gantt_right{
+    top: 0px;
+}
+
+.splitter{
+    border-left: 2px solid red;
 }

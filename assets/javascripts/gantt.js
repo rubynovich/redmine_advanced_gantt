@@ -69,7 +69,7 @@ $(document).ready(function(){
         var today = new Date()
         if(date.getDay()==0||date.getDay()==6){
             if (date <= today){
-                return "weekend_past_simple"
+                return "weekend past_simple"
             } else {
                 return "weekend" ;
             }
@@ -82,14 +82,23 @@ $(document).ready(function(){
     gantt.templates.task_cell_class = function(item,date){
         var today = new Date()
         if(date.getDay()==0||date.getDay()==6){
-            if (date <= today){
-                return "weekend_past_simple"
+            if (date < today){
+                return "weekend past_simple"
             } else {
-                return "weekend" ;
+                if (date == today){
+                    return "weekend splitter" ;
+                } else {
+                    return "weekend" ;
+                }
+
             }
         } else{
-            if (date <= today){
+            if (date < today){
                 return "past_simple"
+            } else{
+                if (date == today){
+                    return "splitter"
+                }
             }
         }
     };
@@ -123,6 +132,17 @@ $(document).ready(function(){
             return ""
         }
     }
+
+    gantt.templates.rightside_text = function(start, end, task){
+        return task.rightside_text;
+    };
+
+    gantt.templates.task_text=function(start, end, task){
+        return '';
+    };
+
+    gantt.templates.progress_text=function(start, end, task){return (task.progress*100)+'%';};
+
     function modHeight(){
         var headHeight = 122;
 
@@ -148,6 +168,7 @@ $(document).ready(function(){
     };
     gantt.config.tooltip_timeout = 500;
     gantt.config.sort = true;
+    gantt.config.drag_links = true;
     gantt.config.show_progress = true;
     gantt.init("gantt_here");
     modHeight();
