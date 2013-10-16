@@ -108,3 +108,7 @@
 .splitter{
     border-left: 2px solid red;
 }
+
+.gantt_task_progress, .gantt_task_line{ border: none !important; border-right: none !important; box-shadow: none !important; }
+
+.gantt_grid_data .gantt_row.odd, .gantt_grid_data .gantt_cell{ background-color: #FFFAF0 !important;}

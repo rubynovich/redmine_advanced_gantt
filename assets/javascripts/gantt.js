@@ -141,7 +141,7 @@ $(document).ready(function(){
         return '';
     };
 
-    gantt.templates.progress_text=function(start, end, task){return (task.progress*100)+'%';};
+    gantt.templates.progress_text=function(start, end, task){return parseInt(task.progress*10)*10+'%';};
 
     function modHeight(){
         var headHeight = 122;
@@ -170,6 +170,7 @@ $(document).ready(function(){
     gantt.config.sort = true;
     gantt.config.drag_links = true;
     gantt.config.show_progress = true;
+    gantt.config.drag_progress = false;
     gantt.init("gantt_here");
     modHeight();
     gantt.parse(tasks)
