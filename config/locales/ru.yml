@@ -1,7 +1,7 @@
 # Russian strings go here for Rails i18n
 ru:
-  permission_view_advanced_gantt: "Показать Гантт диаграмму"
-  project_module_advanced_gantt: "Гантт нов."
-  advanced_gantt: "Гантт нов."
-  html_title: "Диаграмма Гантта"
+  permission_view_advanced_gantt: "Показать диаграмму Ганта"
+  project_module_advanced_gantt: "Диаграмма Ганта (новая)"
+  advanced_gantt: "Диаграмма Ганта (новая)"
+  html_title: "Диаграмма Ганта"
   label_minimal_date: "Минимальная дата в диаграмме"
