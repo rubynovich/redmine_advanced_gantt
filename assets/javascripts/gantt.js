@@ -171,9 +171,13 @@ $(document).ready(function(){
     gantt.config.drag_links = true;
     gantt.config.show_progress = true;
     gantt.config.drag_progress = false;
+    gantt.config.details_on_dblclick = false;
+    gantt.config.autofit = true;
     gantt.init("gantt_here");
     modHeight();
     gantt.parse(tasks)
+    $( ".gantt_grid_head_text" ).resizable({ alsoResize: ".gantt_grid_data .gantt_row .gantt_cell", handles: "n, e" });
+    //$( ".gantt_grid_head_start_date" ).resizable();
     //gantt.load('gantt.js');
     //$(".table").colResizable();
     //$.each(tasks["data"], function(i, val){
