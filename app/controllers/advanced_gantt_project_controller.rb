@@ -19,36 +19,38 @@ class AdvancedGanttProjectController < ApplicationController
     @gantt = Redmine::Helpers::Gantt.new(params)
     @gantt.project = @project
     retrieve_query
-    @query.group_by = nil
-    @gantt.query = @query if @query.valid?
-    basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
-    @data_gantt ||= []
-    #@links_gantt ||= []
-    @links_hash ||= {}
-    Project.project_tree(@gantt.projects) do |project, level|
-      add_project(project, {:level => level})
-    end
-    #@data_gantt_ids = {}
-    #@data_gantt_reverse_ids = {}
-    #i = 0
-    #@data_gantt.each do |item|
-    #  if @data_gantt_ids[item[:id]].nil?
-    #    i += 1
-    #    @data_gantt_ids[item[:id]] = i
-    #    @data_gantt_reverse_ids[i.to_s] = item[:id]
-    #    item[:id] = i
-    #  end
-    #  item[:parent] = @data_gantt_ids[item[:parent]]
-    #end
-
     respond_to do |format|
       format.html {
-        gon.data_gantt = {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
+        #gon.data_gantt = {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
         #gon.data_gantt = {data: @data_gantt[0..0], links:[]}
         render :layout => !request.xhr?
       }
       format.js {
-        render json: {data: @data_gantt, links: []}
+
+
+
+        @query.group_by = nil
+        @gantt.query = @query if @query.valid?
+        basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
+        @data_gantt ||= []
+        #@links_gantt ||= []
+        @links_hash ||= {}
+        Project.project_tree(@gantt.projects) do |project, level|
+          add_project(project, {:level => level})
+        end
+        #@data_gantt_ids = {}
+        #@data_gantt_reverse_ids = {}
+        #i = 0
+        #@data_gantt.each do |item|
+        #  if @data_gantt_ids[item[:id]].nil?
+        #    i += 1
+        #    @data_gantt_ids[item[:id]] = i
+        #    @data_gantt_reverse_ids[i.to_s] = item[:id]
+        #    item[:id] = i
+        #  end
+        #  item[:parent] = @data_gantt_ids[item[:parent]]
+        #end
+        render json: {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
         #render json: {data: @data_gantt[1..10], links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
       }
       #format.png  { send_data(@gantt.to_image, :disposition => 'inline', :type => 'image/png', :filename => "#{basename}.png") } if @gantt.respond_to?('to_image')

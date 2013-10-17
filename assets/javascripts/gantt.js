@@ -56,7 +56,7 @@ $(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function
 })
 
 $(document).ready(function(){
-    var tasks = gon.data_gantt
+    //var tasks = gon.data_gantt
     gantt.attachEvent("onBeforeTaskDisplay", function(id, task){
         if (gantt_filter)
             if (task.priority != gantt_filter)
@@ -147,7 +147,7 @@ $(document).ready(function(){
         var headHeight = 122;
 
         var sch = document.getElementById("gantt_here");
-        sch.style.height = (tasks['data'].length * (gantt.config.scale_height+2))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
+        sch.style.height = (gantt.serialize()["data"].length * (gantt.config.scale_height+2))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
         //var contbox = document.getElementById("contbox");
         //contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
         //sch.style.height = (parseInt(document.body.offsetHeight)-headHeight)+"px";
@@ -173,12 +173,20 @@ $(document).ready(function(){
     gantt.config.drag_progress = false;
     gantt.config.details_on_dblclick = false;
     gantt.config.autofit = true;
+    gantt.config.order_branch = true;
+    gantt.attachEvent("onLoadEnd", function(){
+        //any custom logic here
+        $('.gantt_loader').hide()
+        $('#gantt_here').fadeIn(1000)
+        modHeight();
+    });
+    $('#gantt_here').hide()
     gantt.init("gantt_here");
-    modHeight();
-    gantt.parse(tasks)
+    //
+    //gantt.parse(tasks)
     $( ".gantt_grid_head_text" ).resizable({ alsoResize: ".gantt_grid_data .gantt_row .gantt_cell", handles: "n, e" });
     //$( ".gantt_grid_head_start_date" ).resizable();
-    //gantt.load('gantt.js');
+    gantt.load('gantt.js');
     //$(".table").colResizable();
     //$.each(tasks["data"], function(i, val){
     //    gantt.addTask(val)
