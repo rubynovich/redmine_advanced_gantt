@@ -150,21 +150,23 @@ $(document).ready(function(){
         var headHeight = 122;
 
         var sch = document.getElementById("gantt_here");
-        sch.style.height = (gantt.serialize()["data"].length * (gantt.config.scale_height))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
+        //alert(gantt._order.length);
+        sch.style.height = ((gantt._order.length + 4) * (gantt.config.row_height))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
+        //alert(gantt.serialize()["data"].length)
         //var contbox = document.getElementById("contbox");
         //contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
         //sch.style.height = (parseInt(document.body.offsetHeight)-headHeight)+"px";
         //gantt.setSizes();
     }
 
-    gantt.config.task_height = 20;
+    gantt.config.task_height = 16;
     gantt.config.row_height = 22;
-    gantt.config.scale_height = 22;
+    gantt.config.scale_height = 35;
     gantt.config.link_arrow_size = 8;
     gantt.config.columns=[
-        {name:"text", label:"Задачи",  tree:true, width:'*' },
-        {name: 'start_date', label: 'Начало', width: '70px'},
-        {name: 'end_date', label: 'Окончание', width: '70px'}
+        {name:"text", label:"Задачи",  tree:true, width:220, align: 'left' },
+        {name: 'start_date', label: 'Начало', width: 70, align: 'left'},
+        {name: 'end_date', label: 'Окончание', width: 70, align: 'left'}
     ]
 
     gantt.templates.tooltip_text = function(start,end,task){
@@ -184,7 +186,7 @@ $(document).ready(function(){
         $('.gantt_loader').hide()
         $('#gantt_here').fadeIn(1000)
         modHeight();
-        $( ".gantt_grid" ).resizable({resize: function(event, ui){
+        $( ".gantt_grid" ).resizable({handles: "e, w", resize: function(event, ui){
             var grid_width = $(this).outerWidth(true)
             var task_width = $('#gantt_here').outerWidth(true)-grid_width
 
@@ -196,9 +198,9 @@ $(document).ready(function(){
             $('.gantt_task').width(task_width);
 
             gantt.config.columns=[
-                {name:"text", label:"Задачи",  tree:true, width: col_text_width  },
-                {name: 'start_date', label: 'Начало', width: col_start_date_width},
-                {name: 'end_date', label: 'Окончание', width: col_end_date_width}
+                {name:"text", label:"Задачи",  tree:true, width: col_text_width, align: 'left'  },
+                {name: 'start_date', label: 'Начало', width: 70, align: 'left'},
+                {name: 'end_date', label: 'Окончание', width: 70, align: 'left'}
             ]
 
             gantt.config.grid_width = grid_width;
@@ -209,7 +211,7 @@ $(document).ready(function(){
             $('.gantt_grid_scale, .gantt_grid_data').width(grid_width)
             //gantt.render();
             //gantt.setSizes();
-            //console.log($('.gantt_row div:first-child'));
+            console.log(gantt.updatedRows.length);
         }});
     });
     $('#gantt_here').hide()

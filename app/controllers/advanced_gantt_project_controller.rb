@@ -19,6 +19,17 @@ class AdvancedGanttProjectController < ApplicationController
     @gantt = Redmine::Helpers::Gantt.new(params)
     @gantt.project = @project
     retrieve_query
+
+    @query.group_by = nil
+    @gantt.query = @query if @query.valid?
+    basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
+    @data_gantt ||= []
+    #@links_gantt ||= []
+    @links_hash ||= {}
+    Project.project_tree(@gantt.projects) do |project, level|
+      add_project(project, {:level => level})
+    end
+
     respond_to do |format|
       format.html {
         #gon.data_gantt = {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
@@ -29,15 +40,7 @@ class AdvancedGanttProjectController < ApplicationController
 
 
 
-        @query.group_by = nil
-        @gantt.query = @query if @query.valid?
-        basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
-        @data_gantt ||= []
-        #@links_gantt ||= []
-        @links_hash ||= {}
-        Project.project_tree(@gantt.projects) do |project, level|
-          add_project(project, {:level => level})
-        end
+
         #@data_gantt_ids = {}
         #@data_gantt_reverse_ids = {}
         #i = 0

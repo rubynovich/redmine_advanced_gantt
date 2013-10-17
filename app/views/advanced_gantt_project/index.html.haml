@@ -12,6 +12,7 @@
   = include_gon
   = csrf_meta_tag
 %h2= @query.new_record? ? l(:label_gantt) : h(@query.name)
+= @data_gantt.count
 = form_tag({:controller => 'advanced_gantt_project', :action => 'index', :project_id => @project, :month => params[:month], :year => params[:year], :months => params[:months]}, :method => :get, :id => 'query_form') do              |
   = hidden_field_tag 'set_filter', '1'
   %fieldset#filters{:class => "collapsible #{@query.new_record? ? "" : "collapsed"}"}
