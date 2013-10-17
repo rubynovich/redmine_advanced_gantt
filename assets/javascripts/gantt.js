@@ -6,20 +6,17 @@
  * To change this template use File | Settings | File Templates.
  */
 
+var scale_gantt = function(value){
+    switch(value){
+        /*case "week":
+         gantt.config.scale_unit = "day";
+         gantt.config.date_scale = "%d %M";
 
-$(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function(){
-
-    var node = this
-    switch(node.value){
-        case "week":
-            gantt.config.scale_unit = "day";
-            gantt.config.date_scale = "%d %M";
-
-            gantt.config.scale_height = 60;
-            gantt.config.subscales = [
-                {unit:"hour", step:6, date:"%H"}
-            ];
-            break;
+         gantt.config.scale_height = 60;
+         gantt.config.subscales = [
+         {unit:"hour", step:6, date:"%H"}
+         ];
+         break; */
         case "trplweek":
             gantt.config.scale_unit = "day";
             gantt.config.date_scale = "%d %M";
@@ -52,6 +49,12 @@ $(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function
             ];
             break;
     }
+}
+
+$(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function(){
+
+    var node = this
+    scale_gantt(node.value)
     gantt.render();
 })
 
@@ -67,7 +70,7 @@ $(document).ready(function(){
 
     gantt.templates.scale_cell_class = function(date){
         var today = new Date()
-        if(date.getDay()==0||date.getDay()==6){
+        if((date.getDay()==0||date.getDay()==6) && $('.gantt-zoom-tasks-inputs input[type="radio"]:checked').val() == 'trplweek'){
             if (date <= today){
                 return "weekend past_simple"
             } else {
@@ -81,7 +84,7 @@ $(document).ready(function(){
     };
     gantt.templates.task_cell_class = function(item,date){
         var today = new Date()
-        if(date.getDay()==0||date.getDay()==6){
+        if((date.getDay()==0||date.getDay()==6) && $('.gantt-zoom-tasks-inputs input[type="radio"]:checked' ).val() == 'trplweek'){
             if (date < today){
                 return "weekend past_simple"
             } else {
@@ -133,9 +136,9 @@ $(document).ready(function(){
         }
     }
 
-    gantt.templates.rightside_text = function(start, end, task){
+    /*gantt.templates.rightside_text = function(start, end, task){
         return task.rightside_text;
-    };
+    };*/
 
     gantt.templates.task_text=function(start, end, task){
         return '';
@@ -147,20 +150,21 @@ $(document).ready(function(){
         var headHeight = 122;
 
         var sch = document.getElementById("gantt_here");
-        sch.style.height = (gantt.serialize()["data"].length * (gantt.config.scale_height+2))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
+        sch.style.height = (gantt.serialize()["data"].length * (gantt.config.scale_height))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
         //var contbox = document.getElementById("contbox");
         //contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
         //sch.style.height = (parseInt(document.body.offsetHeight)-headHeight)+"px";
-        gantt.setSizes();
+        //gantt.setSizes();
     }
 
-    gantt.config.task_height = 14;
-    gantt.config.row_height = 17;
-    gantt.config.scale_height = 17;
+    gantt.config.task_height = 20;
+    gantt.config.row_height = 22;
+    gantt.config.scale_height = 22;
     gantt.config.link_arrow_size = 8;
     gantt.config.columns=[
         {name:"text", label:"Задачи",  tree:true, width:'*' },
-        {name: 'start_date', label: 'Дата начала', width: '60px'}
+        {name: 'start_date', label: 'Начало', width: '70px'},
+        {name: 'end_date', label: 'Окончание', width: '70px'}
     ]
 
     gantt.templates.tooltip_text = function(start,end,task){
@@ -174,19 +178,48 @@ $(document).ready(function(){
     gantt.config.details_on_dblclick = false;
     gantt.config.autofit = true;
     gantt.config.order_branch = true;
+    scale_gantt('year')
     gantt.attachEvent("onLoadEnd", function(){
         //any custom logic here
         $('.gantt_loader').hide()
         $('#gantt_here').fadeIn(1000)
         modHeight();
+        $( ".gantt_grid" ).resizable({resize: function(event, ui){
+            var grid_width = $(this).outerWidth(true)
+            var task_width = $('#gantt_here').outerWidth(true)-grid_width
+
+            var col_start_date_width = $('#gantt_here .gantt_grid_scale div[column_id="start_date"]').outerWidth(true)
+            var col_end_date_width = $('#gantt_here .gantt_grid_scale div[column_id="end_date"]').outerWidth(true)
+            var col_text = $('#gantt_here .gantt_grid_scale div[column_id="text"]')
+            var col_text_width = grid_width - col_start_date_width - col_end_date_width
+
+            $('.gantt_task').width(task_width);
+
+            gantt.config.columns=[
+                {name:"text", label:"Задачи",  tree:true, width: col_text_width  },
+                {name: 'start_date', label: 'Начало', width: col_start_date_width},
+                {name: 'end_date', label: 'Окончание', width: col_end_date_width}
+            ]
+
+            gantt.config.grid_width = grid_width;
+            gantt.$grid_data.style.width = grid_width + "px";
+
+            col_text.width(col_text_width)
+            $('.gantt_row div.gantt_cell:first-child').width(col_text_width)
+            $('.gantt_grid_scale, .gantt_grid_data').width(grid_width)
+            //gantt.render();
+            //gantt.setSizes();
+            //console.log($('.gantt_row div:first-child'));
+        }});
     });
     $('#gantt_here').hide()
     gantt.init("gantt_here");
     //
     //gantt.parse(tasks)
-    $( ".gantt_grid_head_text" ).resizable({ alsoResize: ".gantt_grid_data .gantt_row .gantt_cell", handles: "n, e" });
+
     //$( ".gantt_grid_head_start_date" ).resizable();
     gantt.load('gantt.js');
+
     //$(".table").colResizable();
     //$.each(tasks["data"], function(i, val){
     //    gantt.addTask(val)
