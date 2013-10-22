@@ -58,7 +58,26 @@ $(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function
     gantt.render();
 })
 
+function simple_tooltip(target_items, name){
+    console.log($(target_items))
+    $(target_items).each(function(i){
+        $("body").append("<div class='"+name+"' id='"+name+i+"'><p>"+$(this).parent().html()+"</p></div>");
+        var my_tooltip = $("#"+name+i);
+        $(this).removeAttr("title").mouseover(function(){
+            console.log("#"+name+i);
+            console.log(my_tooltip);
+            my_tooltip.css({opacity:0.8, display:"none"}).fadeIn(400);
+        }).mousemove(function(kmouse){
+                my_tooltip.css({left:kmouse.pageX+15, top:kmouse.pageY+15});
+            }).mouseout(function(){
+                my_tooltip.fadeOut(400);
+            });
+    });
+}
+
 $(document).ready(function(){
+
+
     //var tasks = gon.data_gantt
     gantt.attachEvent("onBeforeTaskDisplay", function(id, task){
         if (gantt_filter)
@@ -67,6 +86,29 @@ $(document).ready(function(){
 
         return true;
     });
+
+    gantt.templates.grid_file = function(item) {
+        if (item.avatar){
+            return "<div class='gantt_tree_icon gantt_tree_avatar'><img src='"+item.avatar+"'/></div>";
+
+        } else {
+            return "<div class='gantt_tree_icon gantt_file'></div>";
+        }
+    };
+
+    gantt.templates.grid_folder = function(item) {
+        if (item.avatar){
+            return "<div class='gantt_tree_icon gantt_tree_avatar'><img src='"+item.avatar+"'/></div>";
+        } else {
+            if (item.project == 1){
+                return "<div class='gantt_tree_icon gantt_folder_" +
+                    (item.$open ? "open" : "closed") + "'></div>";
+            } else {
+                return "<div class='gantt_tree_icon gantt_file'></div>";
+            }
+        }
+
+    };
 
     gantt.templates.scale_cell_class = function(date){
         var today = new Date()
@@ -144,6 +186,8 @@ $(document).ready(function(){
         return '';
     };
 
+    //gantt.config.readonly = true;
+
     gantt.templates.progress_text=function(start, end, task){return parseInt(task.progress*10)*10+'%';};
 
     function modHeight(){
@@ -165,8 +209,8 @@ $(document).ready(function(){
     gantt.config.link_arrow_size = 8;
     gantt.config.columns=[
         {name:"text", label:"Задачи",  tree:true, width:220, align: 'left' },
-        {name: 'start_date', label: 'Начало', width: 70, align: 'left'},
-        {name: 'end_date', label: 'Окончание', width: 70, align: 'left'}
+        {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
+        {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
     ]
 
     gantt.templates.tooltip_text = function(start,end,task){
@@ -178,6 +222,11 @@ $(document).ready(function(){
     gantt.config.show_progress = true;
     gantt.config.drag_progress = false;
     gantt.config.details_on_dblclick = false;
+    gantt.config.lightbox.sections = [
+        //{name:"start_date", height:72, type:"duration", map_to:"auto"}
+        {name:"time", height:72, type:"duration", map_to:"auto"}
+    ]
+    gantt.config.drag_lightbox = true;
     gantt.config.autofit = true;
     gantt.config.order_branch = true;
     scale_gantt('year')
@@ -199,19 +248,20 @@ $(document).ready(function(){
 
             gantt.config.columns=[
                 {name:"text", label:"Задачи",  tree:true, width: col_text_width, align: 'left'  },
-                {name: 'start_date', label: 'Начало', width: 70, align: 'left'},
-                {name: 'end_date', label: 'Окончание', width: 70, align: 'left'}
+                {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
+                {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
             ]
 
             gantt.config.grid_width = grid_width;
-            gantt.$grid_data.style.width = grid_width + "px";
+            gantt.$grid_data.style.width = (grid_width - 1) + "px";
 
-            col_text.width(col_text_width)
-            $('.gantt_row div.gantt_cell:first-child').width(col_text_width)
-            $('.gantt_grid_scale, .gantt_grid_data').width(grid_width)
-            //gantt.render();
-            //gantt.setSizes();
-            console.log(gantt.updatedRows.length);
+            //col_text.width(col_text_width)
+
+            gantt._render_grid();
+            //var get_col_text_width = $('#gantt_here .gantt_grid_scale div[column_id="text"]').width()
+            $('.gantt_row div.gantt_cell:first-child').width(col_text_width - 12)
+            //$('.gantt_grid_scale, .gantt_grid_data').width(grid_width)
+            //console.log(gantt.updatedRows.length);
         }});
     });
     $('#gantt_here').hide()
@@ -220,11 +270,15 @@ $(document).ready(function(){
     //gantt.parse(tasks)
 
     //$( ".gantt_grid_head_start_date" ).resizable();
-    gantt.load('gantt.js');
+    gantt.load('gantt.js', function(){
+        simple_tooltip(".gantt_tree_icon.gantt_tree_avatar img","gantt_tree_tooltip");
+    });
 
     //$(".table").colResizable();
     //$.each(tasks["data"], function(i, val){
     //    gantt.addTask(val)
     //})
+
+
 
 })

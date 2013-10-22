@@ -16,31 +16,28 @@ class AdvancedGanttProjectController < ApplicationController
   helper ActionView::Helpers::UrlHelper
 
   def index
+    #@data_gantt[0][:count_items] = @data_gantt.count if @data_gantt[0].is_a?(Hash)
     @gantt = Redmine::Helpers::Gantt.new(params)
-    @gantt.project = @project
-    retrieve_query
-
-    @query.group_by = nil
-    @gantt.query = @query if @query.valid?
-    basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
-    @data_gantt ||= []
-    #@links_gantt ||= []
-    @links_hash ||= {}
-    Project.project_tree(@gantt.projects) do |project, level|
-      add_project(project, {:level => level})
-    end
-
     respond_to do |format|
       format.html {
+
         #gon.data_gantt = {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
         #gon.data_gantt = {data: @data_gantt[0..0], links:[]}
         render :layout => !request.xhr?
       }
       format.js {
-
-
-
-
+        @gantt.project = @project
+        params[:f] = []
+        params[:set_filter] = 0
+        retrieve_query
+        @query.group_by = nil
+        @gantt.query = @query if @query.valid?
+        #basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
+        @data_gantt ||= []
+        @links_hash ||= {}
+        Project.project_tree(@gantt.projects) do |project, level|
+          add_project(project, {:level => level})
+        end
         #@data_gantt_ids = {}
         #@data_gantt_reverse_ids = {}
         #i = 0
@@ -69,13 +66,17 @@ class AdvancedGanttProjectController < ApplicationController
         id: "p#{project.id}",
         text: view_context.link_to_project(project).html_safe,
         project:1,
-        priority: project.level,
+        priority: 0,
+        #priority: project.level,
         open: true,
         status: project.status,
         #open: project.status == '1', #options[:level] == 1 ? 1 : 0,
         progress: (project.completed_percent(:include_subprojects => true) / 100),
-        start_date: project.decorate.start_at,
-        duration: project.decorate.duration,
+        #start_date: "",
+        #max_start_date: project.decorate.start_at,
+        #min_end_date: project.decorate.end_at,
+        #start_date: project.decorate.start_at,
+        #duration: project.decorate.duration,
         scale_height: 20
     }
     item[:parent] = "p#{project.parent.id}" if project.parent.present?
@@ -101,12 +102,13 @@ class AdvancedGanttProjectController < ApplicationController
     @issue_ancestors = []
     add_version = "v#{options[version.id]}" if options[:version]
     issues.each do |issue|
-
+      assign_avatar = "/people/avatar?id=#{issue.assigned_to.avatar.id}&size=100".html_safe if issue.assigned_to && issue.assigned_to.avatar
       item = {
           id: "i#{issue.id}#{add_version}",
           priority: issue.level+issue.project.level+1,
           #id: issue.id,
           text: view_context.link_to_issue(issue),
+          avatar: assign_avatar,
           rightside_text: view_context.link_to_issue(issue),
           parent: issue.parent.nil? ? (options[:version] ? "v#{options[:version].id}" : "p#{issue.project.id}") : "i#{issue.parent.id}#{add_version}",
           #parent: issue.parent.nil? ? issue.project.id : issue.parent.id,

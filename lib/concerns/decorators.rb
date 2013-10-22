@@ -17,6 +17,10 @@ module AdvancedGanttProject
         (object.start_date || Date.today).strftime("%d-%m-%Y")
       end
 
+      def end_at
+        (object.due_date || Date.today).strftime("%d-%m-%Y")
+      end
+
     end
   end
 end

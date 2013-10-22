@@ -1,5 +1,5 @@
 .gantt_task_line{
-    opacity: 0.8;
+    /*opacity: 0.8;*/
 }
 .gantt_task_line.project{
      background: #3576cc;
@@ -89,13 +89,13 @@
 
 
 .gantt_task_line.version .gantt_task_content{
-    background: #c6cc37 !important;  opacity: 0.8;
+    background: #c6cc37 !important; /* opacity: 0.8;*/
 }
 
-.weekend{ background: #f7f2f3 !important; opacity: 0.8;}
+.weekend{ background: #f7f2f3 !important; /* opacity: 0.8; */}
 
-.weekend.past_simple{ background: #f7ece7 !important;}
-.past_simple{ background: #e3f0f7 !important; opacity: 0.8;}
+.weekend.past_simple{ background: rgba(247,236,231,0.5) !important;}
+.past_simple{ background: rgba(227,240,247,0.5) !important; /* opacity: 0.8; */}
 
 
 .gantt_hor_scroll{
@@ -114,3 +114,30 @@
 .gantt_task_progress, .gantt_task_line{ border: none !important; border-right: none !important; box-shadow: none !important; }
 
 .gantt_grid_data .gantt_row.odd, .gantt_grid_data .gantt_cell{ background-color: #FFFAF0 !important;}
+
+.gantt_tree_avatar img{
+    width: 16px;
+    height: 16px;
+}
+
+
+.gantt_tree_tooltip{
+    position:absolute;
+    z-index:999;
+    left:-9999px;
+    padding:5px;
+    border:1px solid #fff;
+    width:100px;
+    height: 100px;
+}
+
+.gantt_tree_tooltip p{
+    /*background: #003377;*/
+    margin:0;
+    padding:0;
+    color:#fff;
+    padding:2px 2px;
+    /*opacity: 1.5;*/
+}
+
+

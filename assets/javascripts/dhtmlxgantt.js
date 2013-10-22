@@ -3316,6 +3316,18 @@ gantt._init_tasks_range = function(){
 
 	this._max_date = this.date[unit + "_start"](this._max_date);
 	this._max_date = this.date.add(this._max_date, 1, unit);
+
+    if(this.config.max_start_date && this.config.min_end_date){
+        if (this._min_date > this.config.max_start_date){
+            this._min_date = this.date[unit + "_start"]( new Date(this.config.max_start_date));
+        }
+        if (this._max_date < this.config.min_end_date){
+            this._max_date = this.date[unit + "_start"]( new Date(this.config.min_end_date));
+        }
+
+        return;
+    }
+
 };
 
 
