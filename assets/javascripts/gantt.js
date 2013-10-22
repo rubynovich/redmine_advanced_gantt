@@ -59,13 +59,10 @@ $(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function
 })
 
 function simple_tooltip(target_items, name){
-    console.log($(target_items))
     $(target_items).each(function(i){
         $("body").append("<div class='"+name+"' id='"+name+i+"'><p>"+$(this).parent().html()+"</p></div>");
         var my_tooltip = $("#"+name+i);
         $(this).removeAttr("title").mouseover(function(){
-            console.log("#"+name+i);
-            console.log(my_tooltip);
             my_tooltip.css({opacity:0.8, display:"none"}).fadeIn(400);
         }).mousemove(function(kmouse){
                 my_tooltip.css({left:kmouse.pageX+15, top:kmouse.pageY+15});
@@ -76,9 +73,6 @@ function simple_tooltip(target_items, name){
 }
 
 $(document).ready(function(){
-
-
-    //var tasks = gon.data_gantt
     gantt.attachEvent("onBeforeTaskDisplay", function(id, task){
         if (gantt_filter)
             if (task.priority != gantt_filter)
@@ -186,7 +180,6 @@ $(document).ready(function(){
         return '';
     };
 
-    //gantt.config.readonly = true;
 
     gantt.templates.progress_text=function(start, end, task){return parseInt(task.progress*10)*10+'%';};
 
@@ -194,9 +187,7 @@ $(document).ready(function(){
         var headHeight = 122;
 
         var sch = document.getElementById("gantt_here");
-        //alert(gantt._order.length);
         sch.style.height = ((gantt._order.length + 4) * (gantt.config.row_height))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
-        //alert(gantt.serialize()["data"].length)
         //var contbox = document.getElementById("contbox");
         //contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
         //sch.style.height = (parseInt(document.body.offsetHeight)-headHeight)+"px";
@@ -223,7 +214,6 @@ $(document).ready(function(){
     gantt.config.drag_progress = false;
     gantt.config.details_on_dblclick = false;
     gantt.config.lightbox.sections = [
-        //{name:"start_date", height:72, type:"duration", map_to:"auto"}
         {name:"time", height:72, type:"duration", map_to:"auto"}
     ]
     gantt.config.drag_lightbox = true;

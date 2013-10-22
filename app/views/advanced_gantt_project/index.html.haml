@@ -12,58 +12,19 @@
   = include_gon
   = csrf_meta_tag
 %h2= l(:label_gantt)
-//= @data_gantt.count
-= form_tag({:controller => 'advanced_gantt_project', :action => 'index', :project_id => @project, :month => params[:month], :year => params[:year], :months => params[:months]}, :method => :get, :id => 'query_form') do              |
-  = hidden_field_tag 'set_filter', '0'
-  //%fieldset#filters{:class => "collapsible #{@query.new_record? ? "" : "collapsed"}"}
-  //  %legend{:onclick => "toggleFieldset(this);"}= l(:label_filter_plural)
-  //  %div{:style => @query.new_record? ? "" : "display: none;"}
-  //    = render :partial => 'queries/filters', :locals => {:query => @query}
-  //%fieldset.collapsible.collapsed
-  //  %legend{:onclick => "toggleFieldset(this);"}= l(:label_options)
-  //  %div{:style => "display: none;"}
-  //    %table
-  //      %tr
-  //        %td
-  //          %fieldset
-  //            %legend= l(:label_related_issues)
-  //            %label
-  //              = check_box_tag "draw_rels", params["draw_rels"], params[:set_filter].blank? || params[:draw_rels]
-  //              - rels = [IssueRelation::TYPE_BLOCKS, IssueRelation::TYPE_PRECEDES]
-  //               - color = Redmine::Helpers::Gantt::DRAW_TYPES[rel][:color]
-  //                = content_tag(:span, '&nbsp;&nbsp;&nbsp;'.html_safe, :style => "background-color: #{color}")
-  //                = l(IssueRelation::TYPES[rel][:name])
-  //        %td
-  //          %fieldset
-  //            %legend= l(:label_gantt_progress_line)
-  //            %label
-  //              = check_box_tag "draw_progress_line", params[:draw_progress_line], params[:draw_progress_line]
-  //              = l(:label_display)
-  %p.contextual.gantt-zoom-tasks-inputs
-    %label
-      = radio_button_tag 'scales', 'trplweek'
-      Дни
-    %label
-      = radio_button_tag 'scales', 'month'
-      Недели
-    %label
-      = radio_button_tag 'scales', 'year', true
-      Месяцы
-    %label
-      = radio_button_tag 'scales', 'years'
-      Года
-    //= gantt_zoom_link(@gantt, :in)
-    //= gantt_zoom_link(@gantt, :out)
-  //%p.buttons
-  //  = text_field_tag 'months', @gantt.months, :size => 2
-  //  = l(:label_months_from)
-  //  = select_month(@gantt.month_from, :prefix => "month", :discard_type => true)
-  //  = select_year(@gantt.year_from, :prefix => "year", :discard_type => true)
-  //  = hidden_field_tag 'zoom', @gantt.zoom
-  //  = link_to_function l(:button_apply), '$("#query_form").submit()', :class => 'icon icon-checked'
-  //  = link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'icon icon-reload'                                             |
-= error_messages_for 'query'
-
+%p.contextual.gantt-zoom-tasks-inputs
+  %label
+    = radio_button_tag 'scales', 'trplweek'
+    Дни
+  %label
+    = radio_button_tag 'scales', 'month'
+    Недели
+  %label
+    = radio_button_tag 'scales', 'year', true
+    Месяцы
+  %label
+    = radio_button_tag 'scales', 'years'
+    Года                                            |
 %div{id: "gantt_here", style: 'width:100%; min-height: 400px;'} &nbsp;
 %div.gantt_loader
 
