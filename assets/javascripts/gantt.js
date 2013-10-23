@@ -70,7 +70,27 @@ function simple_tooltip(target_items, name){
                 my_tooltip.fadeOut(400);
             });
     });
+
 }
+
+function limitMoveLeft(task, limit){
+    var dur = task.end_date - task.start_date;
+    task.end_date = new Date(limit.end_date);
+    task.start_date = new Date(+task.end_date - dur);
+}
+function limitMoveRight(task, limit){
+    var dur = task.end_date - task.start_date;
+    task.start_date = new Date(limit.start_date);
+    task.end_date = new Date(+task.start_date + dur);
+}
+
+function limitResizeLeft(task, limit){
+    task.end_date = new Date(limit.end_date);
+}
+function limitResizeRight(task, limit){
+    task.start_date = new Date(limit.start_date)
+}
+
 
 $(document).ready(function(){
     gantt.attachEvent("onBeforeTaskDisplay", function(id, task){
@@ -118,6 +138,11 @@ $(document).ready(function(){
             }
         }
     };
+
+    gantt.attachEvent("onBeforeTaskSelected", function(id,item){
+        //return false
+    })
+
     gantt.templates.task_cell_class = function(item,date){
         var today = new Date()
         if((date.getDay()==0||date.getDay()==6) && $('.gantt-zoom-tasks-inputs input[type="radio"]:checked' ).val() == 'trplweek'){
@@ -149,7 +174,7 @@ $(document).ready(function(){
     }
 
 
-    gantt.config.details_on_create = true;
+    //gantt.config.details_on_create = false;
 
     gantt.config.sort = true;
 
@@ -212,13 +237,14 @@ $(document).ready(function(){
     gantt.config.drag_links = false;
     gantt.config.show_progress = true;
     gantt.config.drag_progress = false;
-    gantt.config.details_on_dblclick = false;
+    gantt.config.details_on_dblclick = true;
     gantt.config.lightbox.sections = [
         {name:"time", height:72, type:"duration", map_to:"auto"}
     ]
     gantt.config.drag_lightbox = true;
     gantt.config.autofit = true;
     gantt.config.order_branch = true;
+    //gantt.config.select_task  = false;
     scale_gantt('year')
     gantt.attachEvent("onLoadEnd", function(){
         //any custom logic here
@@ -256,6 +282,10 @@ $(document).ready(function(){
     });
     $('#gantt_here').hide()
     gantt.init("gantt_here");
+
+
+
+
     //
     //gantt.parse(tasks)
 
