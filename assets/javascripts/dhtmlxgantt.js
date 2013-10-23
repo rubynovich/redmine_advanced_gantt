@@ -1702,7 +1702,7 @@ gantt._render_grid_header = function() {
         var style = "width:" + (col.width-(last?1:0)) + "px;";
 		var label = (col.label || labels["column_" + col.name]);
 		label = label || "";
-        var cell = "<div class='" + cssClass + "' style='" + style + "' column_id='" + col.name + "'>" + label + sort +  "</div>";
+        var cell = "<td class='" + cssClass + "' style='" + style + "' column_id='" + col.name + "'>" + label + sort +  "</td>";
         cells.push(cell);
     }
     this.$grid_scale.style.height = (this.config.scale_height-1) + "px";
@@ -1754,7 +1754,7 @@ gantt._render_grid_item = function(item) {
         var style = "width:" + (col.width-(last ? 1 : 0)) + "px;";
         if (dhtmlx.defined(col.align))
             style += "text-align:" + col.align + ";";
-        cell = "<div class='" + css + "' style='" + style + "'>" + tree + value + "</div>";
+        cell = "<td class='" + css + "' style='" + style + "'>" + tree + value + "</td>";
         cells.push(cell);
     }
     var css = item.$index%2 === 0 ? "" : " odd";
@@ -1768,7 +1768,7 @@ gantt._render_grid_item = function(item) {
 	if(this.getState().selected_task == item.id){
 		css += " gantt_selected";
 	}
-	var el = document.createElement("div");
+	var el = document.createElement("tr");
 	el.className = "gantt_row" + css;
 	el.style.height = this.config.row_height + "px";
 	el.style.lineHeight = (gantt.config.row_height)+"px";
@@ -6312,7 +6312,7 @@ gantt._init_html_area = function(node){
 		this._obj = node;
 	dhtmlx.assert(this._obj, "Invalid html container: "+node);
 
-    var html = "<div class='gantt_container'><div class='gantt_grid'></div><div class='gantt_task'></div>";
+    var html = "<div class='gantt_container'><table class='gantt_grid'></table><div class='gantt_task'></div>";
     html += "<div class='gantt_ver_scroll'><div></div></div><div class='gantt_hor_scroll'><div></div></div></div>";
 	this._obj.innerHTML = html;
 	//store linsk for further reference
@@ -6323,7 +6323,8 @@ gantt._init_html_area = function(node){
     this.$scroll_ver = childs[2];
     this.$scroll_hor = childs[3];
 
-    this.$grid.innerHTML = "<div class='gantt_grid_scale'></div><div class='gantt_grid_data'></div>";
+    //this.$grid.innerHTML = "<tr class='gantt_grid_scale'></tr><div class='gantt_grid_data'></div>";
+    this.$grid.innerHTML = "<thead><tr class='gantt_grid_scale'></tr></thead><tbody class='gantt_grid_data'></tbody>"
     this.$grid_scale = this.$grid.childNodes[0];
     this.$grid_data = this.$grid.childNodes[1];
 

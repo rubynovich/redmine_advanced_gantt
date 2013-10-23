@@ -251,7 +251,7 @@ $(document).ready(function(){
         $('.gantt_loader').hide()
         $('#gantt_here').fadeIn(1000)
         modHeight();
-        $( ".gantt_grid" ).resizable({handles: "e, w", resize: function(event, ui){
+        /*$( ".gantt_grid" ).resizable({handles: "e, w", resize: function(event, ui){
             var grid_width = $(this).outerWidth(true)
             var task_width = $('#gantt_here').outerWidth(true)-grid_width
 
@@ -278,7 +278,7 @@ $(document).ready(function(){
             $('.gantt_row div.gantt_cell:first-child').width(col_text_width - 12)
             //$('.gantt_grid_scale, .gantt_grid_data').width(grid_width)
             //console.log(gantt.updatedRows.length);
-        }});
+        }}); */
     });
     $('#gantt_here').hide()
     gantt.init("gantt_here");

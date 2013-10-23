@@ -144,6 +144,14 @@
 /*p.gantt-zoom-tasks-inputs{
     margin-top: -50px !important;
 }*/
+table.gantt_grid{
+    padding: 0; margin: 0;
+}
+
+.gantt_row{
+    padding: 0px;
+    margin: 0px;
+}
 
 
 
