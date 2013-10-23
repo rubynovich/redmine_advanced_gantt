@@ -63,7 +63,7 @@ function simple_tooltip(target_items, name){
         $("body").append("<div class='"+name+"' id='"+name+i+"'><p>"+$(this).parent().html()+"</p></div>");
         var my_tooltip = $("#"+name+i);
         $(this).removeAttr("title").mouseover(function(){
-            my_tooltip.css({opacity:0.8, display:"none"}).fadeIn(400);
+            my_tooltip.css({display:"none"}).fadeIn(400);
         }).mousemove(function(kmouse){
                 my_tooltip.css({left:kmouse.pageX+15, top:kmouse.pageY+15});
             }).mouseout(function(){

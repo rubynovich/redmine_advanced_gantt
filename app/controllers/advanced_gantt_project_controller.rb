@@ -18,6 +18,13 @@ class AdvancedGanttProjectController < ApplicationController
   def index
     #@data_gantt[0][:count_items] = @data_gantt.count if @data_gantt[0].is_a?(Hash)
     @gantt = Redmine::Helpers::Gantt.new(params)
+    @gantt.project = @project
+    #params[:f] = []
+    #params[:set_filter] = 0
+    retrieve_query
+    @query.group_by = nil
+    @gantt.query = @query if @query.valid?
+
     respond_to do |format|
       format.html {
 
@@ -26,12 +33,7 @@ class AdvancedGanttProjectController < ApplicationController
         render :layout => !request.xhr?
       }
       format.js {
-        @gantt.project = @project
-        params[:f] = []
-        params[:set_filter] = 0
-        retrieve_query
-        @query.group_by = nil
-        @gantt.query = @query if @query.valid?
+
         #basename = (@project ? "#{@project.identifier}-" : '') + 'gantt'
         @data_gantt ||= []
         @links_hash ||= {}
@@ -75,8 +77,8 @@ class AdvancedGanttProjectController < ApplicationController
         #start_date: "",
         #max_start_date: project.decorate.start_at,
         #min_end_date: project.decorate.end_at,
-        #start_date: project.decorate.start_at,
-        #duration: project.decorate.duration,
+        start_date: project.decorate.start_at,
+        duration: project.decorate.duration,
         scale_height: 20
     }
     item[:parent] = "p#{project.parent.id}" if project.parent.present?

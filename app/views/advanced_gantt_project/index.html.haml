@@ -12,19 +12,36 @@
   = include_gon
   = csrf_meta_tag
 %h2= l(:label_gantt)
-%p.contextual.gantt-zoom-tasks-inputs
-  %label
-    = radio_button_tag 'scales', 'trplweek'
-    Дни
-  %label
-    = radio_button_tag 'scales', 'month'
-    Недели
-  %label
-    = radio_button_tag 'scales', 'year', true
-    Месяцы
-  %label
-    = radio_button_tag 'scales', 'years'
-    Года                                            |
+//= @data_gantt.count
+= form_tag({:controller => 'advanced_gantt_project', :action => 'index', :project_id => @project, :month => params[:month], :year => params[:year], :months => params[:months]}, :method => :get, :id => 'query_form') do              |
+  = hidden_field_tag 'set_filter', '0'
+  %fieldset#filters{:class => "collapsible #{@query.new_record? ? "" : "collapsed"}"}
+    %legend{:onclick => "toggleFieldset(this);"}= l(:label_filter_plural)
+    %div{:style => @query.new_record? ? "" : "display: none;"}
+      = render :partial => 'queries/filters', :locals => {:query => @query}
+  %p.contextual.gantt-zoom-tasks-inputs
+    %label
+      = radio_button_tag 'scales', 'trplweek'
+      Дни
+    %label
+      = radio_button_tag 'scales', 'month'
+      Недели
+    %label
+      = radio_button_tag 'scales', 'year', true
+      Месяцы
+    %label
+      = radio_button_tag 'scales', 'years'
+      Года
+  %p.buttons
+    //= text_field_tag 'months', @gantt.months, :size => 2
+    //= l(:label_months_from)
+    //= select_month(@gantt.month_from, :prefix => "month", :discard_type => true)
+    //= select_year(@gantt.year_from, :prefix => "year", :discard_type => true)
+    //= hidden_field_tag 'zoom', @gantt.zoom
+    = link_to_function l(:button_apply), '$("#query_form").submit()', :class => 'icon icon-checked'
+    = link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'icon icon-reload'                                             |
+= error_messages_for 'query'
+
 %div{id: "gantt_here", style: 'width:100%; min-height: 400px;'} &nbsp;
 %div.gantt_loader
 
