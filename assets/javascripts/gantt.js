@@ -264,6 +264,13 @@ $(document).ready(function(){
         simple_tooltip(".gantt_tree_icon.gantt_tree_avatar img","gantt_tree_tooltip");
     });
 
+    $(document).on('click', '.gantt_tree_content a, .gantt_tooltip a', function(e){
+        e.preventDefault();
+        var url = $(this).attr('href')
+        window.open(url,'_blank');
+        return false;
+    })
+
     //$(".table").colResizable();
     //$.each(tasks["data"], function(i, val){
     //    gantt.addTask(val)
