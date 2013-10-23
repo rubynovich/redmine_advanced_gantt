@@ -209,7 +209,7 @@ $(document).ready(function(){
     };
     gantt.config.tooltip_timeout = 500;
     gantt.config.sort = true;
-    gantt.config.drag_links = true;
+    gantt.config.drag_links = false;
     gantt.config.show_progress = true;
     gantt.config.drag_progress = false;
     gantt.config.details_on_dblclick = false;
