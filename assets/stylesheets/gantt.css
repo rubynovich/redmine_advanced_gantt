@@ -118,6 +118,7 @@
 .gantt_tree_avatar img{
     width: 16px;
     height: 16px;
+    cursor: pointer;
 }
 
 
@@ -143,5 +144,6 @@
 /*p.gantt-zoom-tasks-inputs{
     margin-top: -50px !important;
 }*/
+
 
 

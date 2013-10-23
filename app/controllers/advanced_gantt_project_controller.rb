@@ -111,6 +111,7 @@ class AdvancedGanttProjectController < ApplicationController
           #id: issue.id,
           text: view_context.link_to_issue(issue),
           avatar: assign_avatar,
+          assign_to: ssue.assigned_to.try(:id),
           rightside_text: view_context.link_to_issue(issue),
           parent: issue.parent.nil? ? (options[:version] ? "v#{options[:version].id}" : "p#{issue.project.id}") : "i#{issue.parent.id}#{add_version}",
           #parent: issue.parent.nil? ? issue.project.id : issue.parent.id,

@@ -83,7 +83,7 @@ $(document).ready(function(){
 
     gantt.templates.grid_file = function(item) {
         if (item.avatar){
-            return "<div class='gantt_tree_icon gantt_tree_avatar'><img src='"+item.avatar+"'/></div>";
+            return "<div class='gantt_tree_icon gantt_tree_avatar'><img href='/people/"+item.assign_to+"' src='"+item.avatar+"'/></div>";
 
         } else {
             return "<div class='gantt_tree_icon gantt_file'></div>";
@@ -92,7 +92,7 @@ $(document).ready(function(){
 
     gantt.templates.grid_folder = function(item) {
         if (item.avatar){
-            return "<div class='gantt_tree_icon gantt_tree_avatar'><img src='"+item.avatar+"'/></div>";
+            return "<div class='gantt_tree_icon gantt_tree_avatar'><img href='/people/"+item.assign_to+"' src='"+item.avatar+"'/></div>";
         } else {
             if (item.project == 1){
                 return "<div class='gantt_tree_icon gantt_folder_" +
@@ -264,7 +264,7 @@ $(document).ready(function(){
         simple_tooltip(".gantt_tree_icon.gantt_tree_avatar img","gantt_tree_tooltip");
     });
 
-    $(document).on('click', '.gantt_tree_content a, .gantt_tooltip a', function(e){
+    $(document).on('click', '.gantt_tree_content a, .gantt_tooltip a, .gantt_tree_icon.gantt_tree_avatar img', function(e){
         e.preventDefault();
         var url = $(this).attr('href')
         window.open(url,'_blank');
