@@ -91,6 +91,10 @@ function limitResizeRight(task, limit){
     task.start_date = new Date(limit.start_date)
 }
 
+function after_render_gantt(){
+    simple_tooltip(".gantt_tree_icon.gantt_tree_avatar img","gantt_tree_tooltip");
+
+}
 
 $(document).ready(function(){
     gantt.attachEvent("onBeforeTaskDisplay", function(id, task){
@@ -212,19 +216,21 @@ $(document).ready(function(){
         var headHeight = 122;
 
         var sch = document.getElementById("gantt_here");
-        sch.style.height = ((gantt._order.length + 4) * (gantt.config.row_height))+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
+
+        sch.style.height = ((gantt._order.length+5) * (gantt.config.row_height)+gantt.config.scale_height)+'px'; //(parseInt(document.body.offsetHeight)-headHeight)+"px";
         //var contbox = document.getElementById("contbox");
         //contbox.style.width = (parseInt(document.body.offsetWidth)-300)+"px";
         //sch.style.height = (parseInt(document.body.offsetHeight)-headHeight)+"px";
-        //gantt.setSizes();
+        gantt.setSizes();
     }
 
+    //gantt.config.scroll_size = 400;
     gantt.config.task_height = 16;
     gantt.config.row_height = 22;
     gantt.config.scale_height = 35;
     gantt.config.link_arrow_size = 8;
     gantt.config.columns=[
-        {name:"text", label:"Задачи",  tree:true, width:220, align: 'left' },
+        {name:"text", label:"Задачи",  tree:true, width:40, align: 'left' },
         {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
         {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
     ]
@@ -246,6 +252,11 @@ $(document).ready(function(){
     gantt.config.order_branch = true;
     //gantt.config.select_task  = false;
     scale_gantt('year')
+
+
+    gantt.attachEvent("onScaleAdjusted", function(){
+        after_render_gantt();
+    })
     gantt.attachEvent("onLoadEnd", function(){
         //any custom logic here
         $('.gantt_loader').hide()
@@ -257,25 +268,26 @@ $(document).ready(function(){
 
             var col_start_date_width = $('#gantt_here .gantt_grid_scale div[column_id="start_date"]').outerWidth(true)
             var col_end_date_width = $('#gantt_here .gantt_grid_scale div[column_id="end_date"]').outerWidth(true)
-            var col_text = $('#gantt_here .gantt_grid_scale div[column_id="text"]')
-            var col_text_width = grid_width - col_start_date_width - col_end_date_width
+            //var col_text = $('#gantt_here .gantt_grid_scale div[column_id="text"]')
+            //var col_text_width = grid_width - col_start_date_width - col_end_date_width
 
             $('.gantt_task').width(task_width);
 
-            gantt.config.columns=[
-                {name:"text", label:"Задачи",  tree:true, width: col_text_width, align: 'left'  },
-                {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
-                {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
-            ]
+            //gantt.config.columns=[
+            //    {name:"text", label:"Задачи",  tree:true, width: col_text_width, align: 'left'  },
+            //    {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
+            //    {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
+            //]
 
             gantt.config.grid_width = grid_width;
             gantt.$grid_data.style.width = (grid_width - 1) + "px";
 
             //col_text.width(col_text_width)
 
-            gantt._render_grid();
+            //gantt._render_grid();
             //var get_col_text_width = $('#gantt_here .gantt_grid_scale div[column_id="text"]').width()
-            $('.gantt_row div.gantt_cell:first-child').width(col_text_width - 12)
+            //$('.gantt_row div.gantt_cell:first-child').width(col_text_width - 12)
+
             //$('.gantt_grid_scale, .gantt_grid_data').width(grid_width)
             //console.log(gantt.updatedRows.length);
         }}); */
@@ -290,8 +302,12 @@ $(document).ready(function(){
     //gantt.parse(tasks)
 
     //$( ".gantt_grid_head_start_date" ).resizable();
+
+
+
     gantt.load('gantt.js', function(){
-        simple_tooltip(".gantt_tree_icon.gantt_tree_avatar img","gantt_tree_tooltip");
+        after_render_gantt();
+        $("table.gantt_grid").colResizable();
     });
 
     $(document).on('click', '.gantt_tree_content a, .gantt_tooltip a, .gantt_tree_icon.gantt_tree_avatar img', function(e){
@@ -301,10 +317,19 @@ $(document).ready(function(){
         return false;
     })
 
-    //$(".table").colResizable();
-    //$.each(tasks["data"], function(i, val){
-    //    gantt.addTask(val)
-    //})
+
+
+    /*$.each(tasks["data"], function(i, val){
+        gantt.addTask(val)
+    })*/
+
+
+
+    window.gantt_print =function(template){
+        var printWin= open('', 'displayWindow','width=800,height=600,status=no,toolbar=no,menubar=no,scrollbars=yes');
+        printWin.focus()
+        printWin.document.write(template)
+    }
 
 
 

@@ -6,7 +6,7 @@
 }
 
 .gantt_task_line.project .gantt_task_progress{
-    background: #c1cc4d !important;
+    background: #c1cc4d;
 }
 /* new issue */
 .gantt_task_line.new_issue{
@@ -14,7 +14,7 @@
 }
 
 .gantt_task_line.new_issue .gantt_task_progress{
-    background: #1a6ec7 !important;
+    background: #1a6ec7;
 }
 
 /* in progress issue */
@@ -23,7 +23,7 @@
 }
 
 .gantt_task_line.in_progress_issue .gantt_task_progress{
-    background: #c3a784 !important;
+    background: #c3a784;
 }
 /* callback issue */
 .gantt_task_line.callback_issue{
@@ -31,7 +31,7 @@
 }
 
 .gantt_task_line.callback_issue .gantt_task_progress{
-    background: #b45d3a !important;
+    background: #b45d3a;
 }
 
 /* rejected issue */
@@ -40,7 +40,7 @@
 }
 
 .gantt_task_line.rejected_issue .gantt_task_progress{
-    background: #9b0000 !important;
+    background: #9b0000;
 }
 
 /* agreed issue */
@@ -49,7 +49,7 @@
 }
 
 .gantt_task_line.agreed_issue .gantt_task_progress{
-    background: #3c4f26 !important;
+    background: #3c4f26;
 }
 
 /* canceled issue */
@@ -58,11 +58,11 @@
 }
 
 .gantt_task_line.canceled_issue .gantt_task_progress{
-    background: #9d9d9d !important;
+    background: #9d9d9d;
 }
 
 .gantt_tooltip{
-    /*position: fixed !important;*/
+    /*position: fixed;*/
 }
 
 /* solved issue */
@@ -71,7 +71,7 @@
 }
 
 .gantt_task_line.solved_issue .gantt_task_progress{
-    background: #24693f !important;
+    background: #24693f;
 }
 
 /* closed issue */
@@ -80,7 +80,7 @@
 }
 
 .gantt_task_line.closed_issue .gantt_task_progress{
-    background: #67625e !important;
+    background: #67625e;
 }
 
 .gantt_loader{width: 100%; height: 200px; background: url('/plugin_assets/redmine_advanced_gantt/images/ajax-loader.gif') no-repeat center center}
@@ -111,9 +111,9 @@
     border-left: 2px solid red;
 }
 
-.gantt_task_progress, .gantt_task_line{ border: none !important; border-right: none !important; box-shadow: none !important; }
+.gantt_task_progress, .gantt_task_line{ border: none; border-right: none; box-shadow: none; }
 
-.gantt_grid_data .gantt_row.odd, .gantt_grid_data .gantt_cell{ background-color: #FFFAF0 !important;}
+.gantt_grid_data .gantt_row.odd, .gantt_grid_data .gantt_cell{ background-color: #FFFAF0;}
 
 .gantt_tree_avatar img{
     width: 16px;
@@ -126,8 +126,11 @@
     position:absolute;
     z-index:999;
     left:-9999px;
-    padding:5px;
-    border:1px solid #fff;
+    padding:0px;
+    border: 1px solid #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     width:100px;
     height: 100px;
 }
@@ -137,20 +140,51 @@
     margin:0;
     padding:0;
     color:#fff;
-    padding:2px 2px;
+    padding:0px 0px;
+
     /*opacity: 1.5;*/
 }
 
 /*p.gantt-zoom-tasks-inputs{
     margin-top: -50px !important;
 }*/
-table.gantt_grid{
-    padding: 0; margin: 0;
+table.gantt_grid, table.gantt_grid tr, table.gantt_grid td, table.gantt_grid th  {
+    padding: 0;
 }
+
+table.gantt_grid {
+    border:0px;
+    padding:0;
+    border-collapse:collapse;
+    background-color: transparent;
+}
+
+.gantt_grid thead{
+    background: #D6D6D6;
+}
+
 
 .gantt_row{
     padding: 0px;
-    margin: 0px;
+}
+
+.icon-print{
+    background: url('/plugin_assets/redmine_advanced_gantt/images/printer.png') no-repeat left;
+}
+
+.gantt_container{
+    border: none !important;
+}
+
+.gantt_cell, .gantt_grid_head_cell{
+    /*display: table-cell;*/
+    overflow: hidden !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.gantt_container_table{
+    width: 100%;
 }
 
 

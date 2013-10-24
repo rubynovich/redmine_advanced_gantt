@@ -102,13 +102,23 @@ to use it in non-GPL project. Please contact sales@dhtmlx.com for details
   position:relative;
   white-space:nowrap;
 }
-.gantt_grid { border-right:1px solid #cecece; }
-.gantt_task_scroll { overflow-x:scroll; }
+/*.gantt_grid { border-right:1px solid #cecece; }
+.gantt_task_scroll { overflow-x:scroll; } */
 .gantt_task { position:relative; }
-.gantt_task, .gantt_grid {
+.gantt_task {
+    overflow-x:hidden;
+    overflow-y:hidden;
+    /* display:block; */
+
+    vertical-align:top;
+}
+
+.gantt_grid {
   overflow-x:hidden;
   overflow-y:hidden;
-  display:inline-block;
+  /* display:inline-block; */
+  /*float: left;*/
+  width: 100%;
   vertical-align:top;
 }
 .gantt_grid_scale, .gantt_task_scale {
@@ -125,7 +135,7 @@ to use it in non-GPL project. Please contact sales@dhtmlx.com for details
 }
 .gantt_scale_line:first-child { border-top:none; }
 .gantt_grid_head_cell {
-  display:inline-block;
+ /* display:inline-block; */
   vertical-align:top;
   border-right:1px solid #cecece;
   text-align:center;
@@ -183,8 +193,10 @@ to use it in non-GPL project. Please contact sales@dhtmlx.com for details
   -moz-box-sizing:border-box;
 }
 .gantt_grid_head_cell, .gantt_scale_cell { line-height:inherit; }
+
+
 .gantt_cell {
-  display:inline-block;
+  /*display:inline-block;*/
   vertical-align:top;
   border-right:1px solid #ebebeb;
   padding-left:6px;
@@ -195,6 +207,9 @@ to use it in non-GPL project. Please contact sales@dhtmlx.com for details
   font-size:13px;
 }
 .gantt_grid_scale .gantt_last_cell, .gantt_grid_data .gantt_last_cell, .gantt_task_scale .gantt_last_cell, .gantt_task_bg .gantt_last_cell { border-right-width:0px; }
+
+
+
 .gantt_task_bg { overflow:hidden; }
 .gantt_scale_cell {
   display:inline-block;
@@ -278,6 +293,8 @@ to use it in non-GPL project. Please contact sales@dhtmlx.com for details
 }
 .gantt_grid_head_cell .gantt_sort.gantt_asc { background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAANCAYAAABlyXS1AAAARUlEQVR4nGNgQAKGxib/GbABkIS7b8B/DAUwCRiGK0CXwFBAb1DfP/U/LszwHwi2X7qFgUEArBtdAVwCBmAKMCSQFSDzAWXXaOHsXeqkAAAAAElFTkSuQmCC); }
 .gantt_grid_head_cell .gantt_sort.gantt_desc { background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAANCAYAAABlyXS1AAAARUlEQVR42mNgQAL1/VP/M2ADIIntF2/9x1AAlrh0C47hCmA60DFYwX88gIFGwNDY5D8uDFbg7hvwHx2jmIBTAlkB0e4BAEjlaNtBWJPnAAAAAElFTkSuQmCC); }
+
+
 .gantt_inserted, .gantt_updated { font-weight:bold; }
 .gantt_deleted { text-decoration:line-through; }
 .gantt_invalid { background-color:FFE0E0; }

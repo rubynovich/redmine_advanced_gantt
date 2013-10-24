@@ -5,3 +5,4 @@ ru:
   advanced_gantt: "Диаграмма Ганта (новая)"
   html_title: "Диаграмма Ганта"
   label_minimal_date: "Минимальная дата в диаграмме"
+  label_print_gantt: "Диаграмма Ганта"

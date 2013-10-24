@@ -5,14 +5,19 @@
   = javascript_include_tag 'locale_ru', :plugin => :redmine_advanced_gantt
   = javascript_include_tag 'dhtmlxgantt_tooltip', :plugin => :redmine_advanced_gantt
   - javascript_include_tag 'dhtmlxgantt_quick_info', :plugin => :redmine_advanced_gantt
+  = javascript_include_tag 'colResizable-1.3.min.js', :plugin => :redmine_advanced_gantt
   = javascript_include_tag 'gantt', :plugin => :redmine_advanced_gantt
+
   = stylesheet_link_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
-  = stylesheet_link_tag 'gantt', :plugin => :redmine_advanced_gantt
   = stylesheet_link_tag 'dhtmlxgantt_broadway', :plugin => :redmine_advanced_gantt
+  = stylesheet_link_tag 'gantt', :plugin => :redmine_advanced_gantt
+
   = include_gon
   = csrf_meta_tag
 %h2= l(:label_gantt)
 //= @data_gantt.count
+:javascript
+  var print_template='#{ escape_javascript(render(partial: 'print')) }'
 = form_tag({:controller => 'advanced_gantt_project', :action => 'index', :project_id => @project, :month => params[:month], :year => params[:year], :months => params[:months]}, :method => :get, :id => 'query_form') do              |
   = hidden_field_tag 'set_filter', '0'
   %fieldset#filters{:class => "collapsible #{@query.new_record? ? "" : "collapsed"}"}
@@ -39,9 +44,9 @@
     //= select_year(@gantt.year_from, :prefix => "year", :discard_type => true)
     //= hidden_field_tag 'zoom', @gantt.zoom
     = link_to_function l(:button_apply), '$("#query_form").submit()', :class => 'icon icon-checked'
-    = link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'icon icon-reload'                                             |
+    = link_to l(:button_clear), { :project_id => @project, :set_filter => 1 }, :class => 'icon icon-reload'
+    = link_to_function l(:button_print), 'window.gantt_print(print_template);', :class => 'icon icon-print'                                             |
 = error_messages_for 'query'
-
-%div{id: "gantt_here", style: 'width:100%; min-height: 400px;'} &nbsp;
+%div{id: "gantt_here", style: 'width:100%; min-height: 0px;'} &nbsp;
 %div.gantt_loader
 

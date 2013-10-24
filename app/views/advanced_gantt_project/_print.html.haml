@@ -1,0 +1,22 @@
+!!! 5
+%html
+  %head
+    %title
+    = javascript_include_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
+    = javascript_include_tag 'locale_ru', :plugin => :redmine_advanced_gantt
+    = javascript_include_tag 'dhtmlxgantt_tooltip', :plugin => :redmine_advanced_gantt
+    - javascript_include_tag 'dhtmlxgantt_quick_info', :plugin => :redmine_advanced_gantt
+    = javascript_include_tag 'gantt', :plugin => :redmine_advanced_gantt
+    = stylesheet_link_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
+    = stylesheet_link_tag 'gantt', :plugin => :redmine_advanced_gantt
+    = stylesheet_link_tag 'dhtmlxgantt_broadway', :plugin => :redmine_advanced_gantt
+    = stylesheet_link_tag 'print_gantt', :plugin => :redmine_advanced_gantt
+  %body
+    %h2
+      %span= l(:label_print_gantt)
+      :escaped
+        -
+      %span#project_title
+    #gant_here
+    :javascript
+      window.init_print_gantt()

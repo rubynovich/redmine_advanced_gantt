@@ -1702,7 +1702,7 @@ gantt._render_grid_header = function() {
         var style = "width:" + (col.width-(last?1:0)) + "px;";
 		var label = (col.label || labels["column_" + col.name]);
 		label = label || "";
-        var cell = "<td class='" + cssClass + "' style='" + style + "' column_id='" + col.name + "'>" + label + sort +  "</td>";
+        var cell = "<th class='" + cssClass + "' style='" + style + "' column_id='" + col.name + "'>" + label + sort +  "</th>";
         cells.push(cell);
     }
     this.$grid_scale.style.height = (this.config.scale_height-1) + "px";
@@ -6312,16 +6312,19 @@ gantt._init_html_area = function(node){
 		this._obj = node;
 	dhtmlx.assert(this._obj, "Invalid html container: "+node);
 
-    var html = "<div class='gantt_container'><table class='gantt_grid'></table><div class='gantt_task'></div>";
+    var html = "<div class='gantt_container'><table class='gantt_container_table'><tr><td><table class='gantt_grid'></table></td><td class='gantt_task'></td></tr></table>";
     html += "<div class='gantt_ver_scroll'><div></div></div><div class='gantt_hor_scroll'><div></div></div></div>";
 	this._obj.innerHTML = html;
 	//store linsk for further reference
     this.$container = this._obj.firstChild;
-    var childs = this.$container.childNodes;
-	this.$grid = childs[0];
-	this.$task = childs[1];
-    this.$scroll_ver = childs[2];
-    this.$scroll_hor = childs[3];
+
+    var childs_one = this.$container.firstChild.firstChild.firstChild.childNodes;
+    var childs_two = this.$container.childNodes;
+
+	this.$grid = childs_one[0].firstChild;
+	this.$task = childs_one[1];
+    this.$scroll_ver = childs_two[1];
+    this.$scroll_hor = childs_two[2];
 
     //this.$grid.innerHTML = "<tr class='gantt_grid_scale'></tr><div class='gantt_grid_data'></div>";
     this.$grid.innerHTML = "<thead><tr class='gantt_grid_scale'></tr></thead><tbody class='gantt_grid_data'></tbody>"
@@ -6361,8 +6364,9 @@ gantt._set_sizes = function(){
 	this._y = this._obj.clientHeight;
 
 	//same height
-	this.$grid.style.height = this.$task.style.height = (this._y - this.$scroll_hor.offsetHeight - 2)+"px";
-    this.$grid_data.style.height = this.$task_data.style.height = (this._y - (this.config.scale_height||0) - this.$scroll_hor.offsetHeight - 2) + "px";
+	//this.$grid.style.height = this.$task.style.height = (this._y - this.$scroll_hor.offsetHeight - 2)+"px";
+
+    //this.$grid_data.style.height = this.$task_data.style.height = (this._y - (this.config.scale_height||0) - this.$scroll_hor.offsetHeight - 2) + "px";
 
 	//share width
 	this.$grid.style.width = (this.config.grid_width-1)+"px";
@@ -6398,6 +6402,7 @@ gantt.render = function(){
 		if(id)
 			this.showTask(id);
 	}
+    after_render_gantt();
 };
 
 
