@@ -6312,7 +6312,7 @@ gantt._init_html_area = function(node){
 		this._obj = node;
 	dhtmlx.assert(this._obj, "Invalid html container: "+node);
 
-    var html = "<div class='gantt_container'><table class='gantt_container_table'><tr><td><table class='gantt_grid'></table></td><td class='gantt_task'></td></tr></table>";
+    var html = "<div class='gantt_container'><table class='gantt_container_table'><tr><td><table class='gantt_grid'></table></td><td><div class='gantt_task'></div></td></tr></table>";
     html += "<div class='gantt_ver_scroll'><div></div></div><div class='gantt_hor_scroll'><div></div></div></div>";
 	this._obj.innerHTML = html;
 	//store linsk for further reference
@@ -6322,7 +6322,7 @@ gantt._init_html_area = function(node){
     var childs_two = this.$container.childNodes;
 
 	this.$grid = childs_one[0].firstChild;
-	this.$task = childs_one[1];
+	this.$task = childs_one[1].firstChild;
     this.$scroll_ver = childs_two[1];
     this.$scroll_hor = childs_two[2];
 
@@ -6335,6 +6335,7 @@ gantt._init_html_area = function(node){
 	this.$task_scale = this.$task.childNodes[0];
 
 	this.$task_data = this.$task.childNodes[1];
+    //console.log(this.$task_data)
 
 	this.$task_bg = this.$task_data.childNodes[0];
 	this.$task_links = this.$task_data.childNodes[1];
@@ -6366,11 +6367,12 @@ gantt._set_sizes = function(){
 	//same height
 	//this.$grid.style.height = this.$task.style.height = (this._y - this.$scroll_hor.offsetHeight - 2)+"px";
 
-    //this.$grid_data.style.height = this.$task_data.style.height = (this._y - (this.config.scale_height||0) - this.$scroll_hor.offsetHeight - 2) + "px";
+    //this.$grid_data.style.height =
+    this.$task_data.style.height = (this._y - (this.config.scale_height||0) - this.$scroll_hor.offsetHeight - 2) + "px";
 
 	//share width
-	this.$grid.style.width = (this.config.grid_width-1)+"px";
-    this.$grid_data.style.width = (this.config.grid_width-1)+"px";
+	//this.$grid.style.width = (this.config.grid_width-1)+"px";
+    //this.$grid_data.style.width = (this.config.grid_width-1)+"px";
 	this.$task.style.width = (this._x - this.config.grid_width - 2)+"px";
 };
 

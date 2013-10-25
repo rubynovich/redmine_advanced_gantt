@@ -307,7 +307,10 @@ $(document).ready(function(){
 
     gantt.load('gantt.js', function(){
         after_render_gantt();
+        $("table.gantt_container_table").colResizable();
         $("table.gantt_grid").colResizable();
+
+
     });
 
     $(document).on('click', '.gantt_tree_content a, .gantt_tooltip a, .gantt_tree_icon.gantt_tree_avatar img', function(e){
