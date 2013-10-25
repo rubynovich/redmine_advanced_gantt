@@ -101,6 +101,7 @@
 .gantt_hor_scroll{
     position: fixed;
     bottom: 0px;
+    z-index: 9999;
 }
 
 .gantt_side_content.gantt_right{
@@ -119,6 +120,11 @@
     width: 16px;
     height: 16px;
     cursor: pointer;
+    padding-top: 2px;
+}
+
+.gantt_tree_avatar{
+    height: 21px;
 }
 
 
@@ -201,6 +207,29 @@ table..gantt_container_table, table..gantt_container_table tr, table..gantt_cont
 .gantt_grid{
     width: 100%;
 }
+
+th.gantt_task_container{
+    height: 1px; overflow: visible; display: block;
+}
+th.gantt_task_container div.gantt_task{
+    position: relative; z-index: 9999;
+}
+
+.gantt_grid_data .gantt_row, .gantt_grid_data .gantt_row.odd {
+     border: none;
+}
+
+.gantt_grid_data .gantt_row td.gantt_cell, .gantt_grid_data .gantt_row.odd td.gantt_cell {
+    border-top: 1px solid #000;
+}
+
+.CRG{
+ z-index: 2147483647;
+}
+
+/*.gantt_task{
+    width: 100%;
+}*/
 
 
 

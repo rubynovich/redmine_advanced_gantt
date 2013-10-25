@@ -229,17 +229,29 @@ $(document).ready(function(){
     gantt.config.row_height = 22;
     gantt.config.scale_height = 35;
     gantt.config.link_arrow_size = 8;
-    gantt.config.columns=[
-        {name:"text", label:"Задачи",  tree:true, width:40, align: 'left' },
-        {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
-        {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
-    ]
+
+    var columns_hash = {
+       "text": {name:"text", label:"Задачи",  tree:true, width:200, align: 'left' },
+       "start_date": {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
+       "end_date": {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
+    }
+
+
+
+    gantt.config.columns = []
+
+    $.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
+
+
+    console.log(gantt.config.columns)
+
+
 
     gantt.templates.tooltip_text = function(start,end,task){
         return task.tooltip ? task.tooltip : task.text;
     };
     gantt.config.tooltip_timeout = 500;
-    gantt.config.sort = true;
+
     gantt.config.drag_links = false;
     gantt.config.show_progress = true;
     gantt.config.drag_progress = false;
@@ -307,8 +319,21 @@ $(document).ready(function(){
 
     gantt.load('gantt.js', function(){
         after_render_gantt();
-        $("table.gantt_container_table").colResizable();
-        $("table.gantt_grid").colResizable();
+        //$("table.gantt_container_table").colResizable();
+        $("table.gantt_grid").colResizable({headerOnly: true, onResize: function(e){
+            var columns = $(e.currentTarget).find('th.gantt_grid_head_cell');
+            $.each(columns, function(ind, column){
+                var name = $(column).attr('column_id')
+                columns_hash[name]["width"] = parseInt(column.style.width.replace('px',''))
+                //console.log(name+':'+column.style.width)
+            })
+            //console.log(columns_hash)
+            gantt.config.columns = []
+            $.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
+            gantt.setSizes();
+            gantt._scroll_resize();
+            //gantt.render();
+        }});
 
 
     });
@@ -329,9 +354,12 @@ $(document).ready(function(){
 
 
     window.gantt_print =function(template){
-        var printWin= open('', 'displayWindow','width=800,height=600,status=no,toolbar=no,menubar=no,scrollbars=yes');
-        printWin.focus()
-        printWin.document.write(template)
+        //console.log(gantt.$task_bg)
+        gantt.render()
+
+        //var printWin= open('', 'displayWindow','width=800,height=600,status=no,toolbar=no,menubar=no,scrollbars=yes');
+        //printWin.focus()
+        //printWin.document.write(template)
     }
 
 

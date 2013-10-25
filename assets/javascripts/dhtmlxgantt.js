@@ -1572,9 +1572,11 @@ dhtmlxDnD.prototype = {
 gantt._init_grid = function() {
     this._click.gantt_close = dhtmlx.bind(function(e, id, trg) {
         this.close(id);
+        after_render_gantt();
     }, this);
     this._click.gantt_open = dhtmlx.bind(function(e, id, trg) {
         this.open(id);
+        after_render_gantt();
     }, this);
 
 
@@ -1603,9 +1605,20 @@ gantt._init_grid = function() {
 				name: column,
 				direction: sort
 			};
-			this._render_grid_header();
+
+            $(this.$grid).find('th div.gantt_sort').removeClass('gantt_asc').removeClass('gantt_desc')
+
+            $(this.$grid).find('th[column_id="'+column+'"] div.gantt_sort').addClass('gantt_'+sort)
+
+            //console.log($(this.$grid).find('th[column_id="'+column+'"] div.gantt_sort'))
+
+
+            //this._render_grid_header();
+            //var sort_div = (this._sort && column.name == this._sort.name) ? ("<div class='gantt_sort gantt_" + this._sort.direction + "'></div>") : "";
+            //console.log(sort_div)
 
 			this.sort(column, sort == "desc");
+
 		}
 	}, this);
 
@@ -1695,20 +1708,30 @@ gantt._render_grid_header = function() {
         if (last && this.config.grid_width > width+col.width)
             col.width = this.config.grid_width - width;
         width += col.width;
-        var sort = (this._sort && col.name == this._sort.name) ? ("<div class='gantt_sort gantt_" + this._sort.direction + "'></div>") : "";
+        var sort = (this._sort && col.name == this._sort.name) ? ("<div class='gantt_sort gantt_" + this._sort.direction + "'></div>") : "<div class='gantt_sort'></div>";
         var cssClass = "gantt_grid_head_cell" + (" gantt_grid_head_" + col.name)
 			+ (last ? " gantt_last_cell" : "") + this.templates.grid_header_class(col.name, col);
 
-        var style = "width:" + (col.width-(last?1:0)) + "px;";
+        var style = "width:" + (col.width-(last?1:0)) + "px; line-height:"+(this.config.scale_height-1) + "px;";
 		var label = (col.label || labels["column_" + col.name]);
 		label = label || "";
         var cell = "<th class='" + cssClass + "' style='" + style + "' column_id='" + col.name + "'>" + label + sort +  "</th>";
         cells.push(cell);
     }
+    cells.push("<th class='gantt_task_container'><div class='gantt_task'></div></th>")
     this.$grid_scale.style.height = (this.config.scale_height-1) + "px";
-    this.$grid_scale.style.lineHeight = lineHeigth + "px";
+    //this.$grid_scale.style.lineHeight = lineHeigth + "px";
     this.$grid_scale.style.width = (width-1) + "px";
     this.$grid_scale.innerHTML = cells.join("");
+
+    this.$task = this.$grid_scale.firstChild.childNodes[cells.length -1].firstChild;
+    //console.log(this.$task)
+    this.$task.innerHTML = "<div class='gantt_task_scale'></div><div class='gantt_data_area'><div class='gantt_task_bg'></div><div class='gantt_links_area'></div><div class='gantt_bars_area'></div></div>";
+    this.$task_scale = this.$task.childNodes[0];
+    this.$task_data = this.$task.childNodes[1];
+    this.$task_bg = this.$task_data.childNodes[0];
+    this.$task_links = this.$task_data.childNodes[1];
+    this.$task_bars = this.$task_data.childNodes[2];
 };
 
 
@@ -1771,7 +1794,7 @@ gantt._render_grid_item = function(item) {
 	var el = document.createElement("tr");
 	el.className = "gantt_row" + css;
 	el.style.height = this.config.row_height + "px";
-	el.style.lineHeight = (gantt.config.row_height)+"px";
+	el.style.lineHeight = (gantt.config.row_height -1)+"px";
 	el.setAttribute(this.config.task_attribute, item.id);
 	el.innerHTML = cells.join("");
 	return el;
@@ -1841,7 +1864,7 @@ gantt.moveTask = function(sid, tindex, parent){
         tbranch.push(sid);
     else
         tbranch = tbranch.slice(0, tindex).concat([ sid ]).concat(tbranch.slice(tindex));
-    
+
     source.parent = parent;
     this._branches[parent] = tbranch;
     this.refreshData();
@@ -1912,7 +1935,7 @@ gantt._init_dnd = function() {
                     if (next.$level == item.$level){
                         this.moveTask(item.id, -1, next.parent);
                         dd.target = "next:"+next.id;
-                        return 
+                        return
                     }
                 }
             }
@@ -3196,11 +3219,11 @@ gantt._delete_link_handler = function(id, e){
 
 		var title = "";
 		var question = gantt.locale.labels.link + " " +this.templates.link_description(this.getLink(id)) + " " + gantt.locale.labels.confirm_link_deleting;
-		
+
 		window.setTimeout(function(){
 			gantt._dhtmlx_confirm(question, title, function(){
 				gantt.deleteLink(id);
-			});		
+			});
 		},(gantt.config.touch ? 300 : 1));
 	}
 };
@@ -3240,6 +3263,7 @@ gantt._render_data = function(){
 	var renderers = this._get_task_renderers();
 	for(var i=0; i < renderers.length; i++){
 		renderers[i].render_items(data);
+
 	}
 
 	var links = gantt._get_links_data();
@@ -3304,7 +3328,7 @@ gantt._init_tasks_range = function(){
 
 	this._min_date = min;
 	this._max_date = max;
-	
+
 	if(!max || max == -Infinity){
 		this._min_date = new Date();
 		this._max_date = new Date(this._min_date);
@@ -4069,7 +4093,7 @@ gantt._sync_order_item = function(item) {
         var children = this._branches[item.id];
         if (children)
         	for (var i = 0; i < children.length; i++)
-        		this._sync_order_item(this._pull[children[i]]);            	
+        		this._sync_order_item(this._pull[children[i]]);
     }
 };
 
@@ -4210,7 +4234,7 @@ gantt.xml = {
 		toptag = toptag || "data";
 		if (!loader.getXMLTopNode){
 			loader = new dtmlXMLLoaderObject(function() {});
-			loader.loadXMLString(text);	
+			loader.loadXMLString(text);
 		}
 
 		xml = loader.getXMLTopNode(toptag);
@@ -4254,7 +4278,7 @@ gantt.xml = {
 		for (var key in gantt._lpull)
 			links.push(this._copyLink(gantt._lpull[key]));
 
-		return "<data>"+tasks.join("")+"<coll_options for='links'>"+links.join("")+"</coll_options></data>";			
+		return "<data>"+tasks.join("")+"<coll_options for='links'>"+links.join("")+"</coll_options></data>";
 	}
 };
 
@@ -4876,10 +4900,10 @@ gantt._init_skin = function(){
 		config[1].width = skinset._second_column_width;
 	if (config[2] && typeof config[2].width == "undefined")
 		config[2].width = skinset._third_column_width;
-	
+
 	if (skinset._lightbox_template)
 		gantt._lightbox_template = skinset._lightbox_template;
-	
+
 	gantt._init_skin = function(){};
 };
 gantt.skins = {};
@@ -5581,7 +5605,7 @@ gantt.form_blocks={
             duration.onchange = dhtmlx.bind(function(e) { _calc_date(); }, this);
 
             this.form_blocks._fill_lightbox_select(s,0,ev.start_date,map,cfg);
-            
+
             var final_value;
             var unit = gantt._tasks.unit;
             if (!ev.end_date)
@@ -5661,28 +5685,28 @@ gantt._dhtmlx_confirm = function(message, title, callback, ok) {
 /*dhx:require			core/dhtmlxdataprocessor.js*/
 /*jsl:ignore*/
 /**
-	* 	@desc: constructor, data processor object 
+	* 	@desc: constructor, data processor object
 	*	@param: serverProcessorURL - url used for update
 	*	@type: public
 	*/
 function dataProcessor(serverProcessorURL){
     this.serverProcessor = serverProcessorURL;
     this.action_param="!nativeeditor_status";
-    
+
 	this.object = null;
 	this.updatedRows = []; //ids of updated rows
-	
+
 	this.autoUpdate = true;
 	this.updateMode = "cell";
-	this._tMode="GET"; 
+	this._tMode="GET";
 	this.post_delim = "_";
-	
+
     this._waitMode=0;
     this._in_progress={};//?
     this._invalid={};
     this.mandatoryFields=[];
     this.messages=[];
-    
+
     this.styles={
     	updated:"font-weight:bold;",
     	inserted:"font-weight:bold;",
@@ -5692,7 +5716,7 @@ function dataProcessor(serverProcessorURL){
     	error:"color:red;",
     	clear:"font-weight:normal;text-decoration:none;"
     };
-    
+
     this.enableUTFencoding(true);
     dhtmlxEventable(this);
 
@@ -5720,7 +5744,7 @@ dataProcessor.prototype={
 	* 	@desc: allows to set escaping mode
 	*	@param: true - utf based escaping, simple - use current page encoding
 	*	@type: public
-	*/	
+	*/
 	enableUTFencoding:function(mode){
         this._utf=convertStringToBoolean(mode);
     },
@@ -5781,7 +5805,7 @@ dataProcessor.prototype={
 	setUpdated:function(rowId,state,mode){
 		if (this._silent_mode) return;
 		var ind=this.findRow(rowId);
-		
+
 		mode=mode||"updated";
 		var existing = this.obj.getUserData(rowId,this.action_param);
 		if (existing && mode == "updated") mode=existing;
@@ -5789,7 +5813,7 @@ dataProcessor.prototype={
 			this.set_invalid(rowId,false); //clear previous error flag
 			this.updatedRows[ind]=rowId;
 			this.obj.setUserData(rowId,this.action_param,mode);
-			if (this._in_progress[rowId]) 
+			if (this._in_progress[rowId])
 				this._in_progress[rowId]="wait";
 		} else{
 			if (!this.is_invalid(rowId)){
@@ -5801,12 +5825,12 @@ dataProcessor.prototype={
 		//clear changed flag
 		if (!state)
 			this._clearUpdateFlag(rowId);
-     			
+
 		this.markRow(rowId,state,mode);
 		if (state && this.autoUpdate) this.sendData(rowId);
 	},
 	_clearUpdateFlag:function(id){},
-	markRow:function(id,state,mode){ 
+	markRow:function(id,state,mode){
 		var str="";
 		var invalid=this.is_invalid(id);
 		if (invalid){
@@ -5816,7 +5840,7 @@ dataProcessor.prototype={
 		if (this.callEvent("onRowMark",[id,state,mode,invalid])){
 			//default logic
 			str=this.styles[state?mode:"clear"]+str;
-			
+
         	this.obj[this._methods[0]](id,str);
 
 			if (invalid && invalid.details){
@@ -5833,7 +5857,7 @@ dataProcessor.prototype={
 	is_invalid:function(id){
 		return this._invalid[id];
 	},
-	set_invalid:function(id,mode,details){ 
+	set_invalid:function(id,mode,details){
 		if (details) mode={value:mode, details:details, toString:function(){ return this.value.toString(); }};
 		this._invalid[id]=mode;
 	},
@@ -5842,7 +5866,7 @@ dataProcessor.prototype={
 	*	@param: rowId - id of row to set update-status for
 	*	@type: public
 	*/
-	checkBeforeUpdate:function(rowId){ 
+	checkBeforeUpdate:function(rowId){
 		return true;
 	},
 	/**
@@ -5853,17 +5877,17 @@ dataProcessor.prototype={
 	sendData:function(rowId){
 		if (this._waitMode && (this.obj.mytype=="tree" || this.obj._h2)) return;
 		if (this.obj.editStop) this.obj.editStop();
-	
-		
+
+
 		if(typeof rowId == "undefined" || this._tSend) return this.sendAllData();
 		if (this._in_progress[rowId]) return false;
-		
+
 		this.messages=[];
 		if (!this.checkBeforeUpdate(rowId) && this.callEvent("onValidationError",[rowId,this.messages])) return false;
 		this._beforeSendData(this._getRowData(rowId),rowId);
     },
     _beforeSendData:function(data,rowId){
-    	if (!this.callEvent("onBeforeUpdate",[rowId,this.getState(rowId),data])) return false;	
+    	if (!this.callEvent("onBeforeUpdate",[rowId,this.getState(rowId),data])) return false;
 		this._sendData(data,rowId);
     },
     serialize:function(data, id){
@@ -5896,12 +5920,12 @@ dataProcessor.prototype={
     },
     _sendData:function(a1,rowId){
     	if (!a1) return; //nothing to send
-		if (!this.callEvent("onBeforeDataSending",rowId?[rowId,this.getState(rowId),a1]:[null, null, a1])) return false;				
-		
+		if (!this.callEvent("onBeforeDataSending",rowId?[rowId,this.getState(rowId),a1]:[null, null, a1])) return false;
+
     	if (rowId)
 			this._in_progress[rowId]=(new Date()).valueOf();
 		var a2=new dtmlXMLLoaderObject(this.afterUpdate,this,true);
-		
+
 		var a3 = this.serverProcessor+(this._user?(getUrlSymbol(this.serverProcessor)+["dhx_user="+this._user,"dhx_version="+this.obj.getUserData(0,"version")].join("&")):"");
 
 		if (this._tMode!="POST")
@@ -5912,14 +5936,14 @@ dataProcessor.prototype={
 		this._waitMode++;
     },
 	sendAllData:function(){
-		if (!this.updatedRows.length) return;			
+		if (!this.updatedRows.length) return;
 
 		this.messages=[]; var valid=true;
 		for (var i=0; i<this.updatedRows.length; i++)
 			valid&=this.checkBeforeUpdate(this.updatedRows[i]);
 		if (!valid && !this.callEvent("onValidationError",["",this.messages])) return false;
-	
-		if (this._tSend) 
+
+		if (this._tSend)
 			this._sendData(this._getAllData());
 		else
 			for (var i=0; i<this.updatedRows.length; i++)
@@ -5929,29 +5953,29 @@ dataProcessor.prototype={
 					if (this._waitMode && (this.obj.mytype=="tree" || this.obj._h2)) return; //block send all for tree
 				}
 	},
-    
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 	_getAllData:function(rowId){
 		var out={};
 		var has_one = false;
 		for(var i=0;i<this.updatedRows.length;i++){
 			var id=this.updatedRows[i];
 			if (this._in_progress[id] || this.is_invalid(id)) continue;
-			if (!this.callEvent("onBeforeUpdate",[id,this.getState(id)])) continue;	
+			if (!this.callEvent("onBeforeUpdate",[id,this.getState(id)])) continue;
 			out[id]=this._getRowData(id,id+this.post_delim);
 			has_one = true;
 			this._in_progress[id]=(new Date()).valueOf();
 		}
 		return has_one?out:null;
 	},
-	
-	
+
+
 	/**
 	* 	@desc: specify column which value should be varified before sending to server
 	*	@param: ind - column index (0 based)
@@ -5969,11 +5993,11 @@ dataProcessor.prototype={
 	clearVerificator:function(ind){
 		this.mandatoryFields[ind] = false;
 	},
-	
-	
-	
-	
-	
+
+
+
+
+
 	findRow:function(pattern){
 		var i=0;
     	for(i=0;i<this.updatedRows.length;i++)
@@ -5981,11 +6005,11 @@ dataProcessor.prototype={
 	    return i;
     },
 
-   
-	
 
 
-    
+
+
+
 
 
 
@@ -6017,14 +6041,14 @@ dataProcessor.prototype={
 		var marker = sid;
 		var correct=(action!="error" && action!="invalid");
 		if (!correct) this.set_invalid(sid,action);
-		if ((this._uActions)&&(this._uActions[action])&&(!this._uActions[action](btag))) 
+		if ((this._uActions)&&(this._uActions[action])&&(!this._uActions[action](btag)))
 			return (delete this._in_progress[marker]);
-			
+
 		if (this._in_progress[marker]!="wait")
 	    	this.setUpdated(sid, false);
-	    	
+
 	    var soid = sid;
-	
+
 	    switch (action) {
 	    case "inserted":
 	    case "insert":
@@ -6041,7 +6065,7 @@ dataProcessor.prototype={
 	        return this.callEvent("onAfterUpdate", [sid, action, tid, btag]);
 	        break;
 	    }
-	    
+
 	    if (this._in_progress[marker]!="wait"){
 	    	if (correct) this.obj.setUserData(sid, this.action_param,'');
 	    	delete this._in_progress[marker];
@@ -6049,7 +6073,7 @@ dataProcessor.prototype={
     		delete this._in_progress[marker];
     		this.setUpdated(tid,true,this.obj.getUserData(sid,this.action_param));
 		}
-	    
+
 	    this.callEvent("onAfterUpdate", [soid, action, tid, btag]);
 	},
 
@@ -6067,15 +6091,15 @@ dataProcessor.prototype={
 			var action = btag.getAttribute("type");
 			var sid = btag.getAttribute("sid");
 			var tid = btag.getAttribute("tid");
-			
+
 			that.afterUpdateCallback(sid,tid,action,btag);
 		}
 		that.finalizeUpdate();
 	},
 	finalizeUpdate:function(){
 		if (this._waitMode) this._waitMode--;
-		
-		if ((this.obj.mytype=="tree" || this.obj._h2) && this.updatedRows.length) 
+
+		if ((this.obj.mytype=="tree" || this.obj._h2) && this.updatedRows.length)
 			this.sendData();
 		this.callEvent("onAfterUpdateFinish",[]);
 		if (!this.updatedRows.length)
@@ -6085,7 +6109,7 @@ dataProcessor.prototype={
 
 
 
-	
+
 	/**
 	* 	@desc: initializes data-processor
 	*	@param: anObj - dhtmlxGrid object to attach this data-processor to
@@ -6093,17 +6117,17 @@ dataProcessor.prototype={
 	*/
 	init:function(anObj){
 		this.obj = anObj;
-		if (this.obj._dp_init) 
+		if (this.obj._dp_init)
 			this.obj._dp_init(this);
 	},
-	
-	
+
+
 	setOnAfterUpdate:function(ev){
 		this.attachEvent("onAfterUpdate",ev);
 	},
 	enableDebug:function(mode){
 	},
-	setOnBeforeUpdateHandler:function(func){  
+	setOnBeforeUpdateHandler:function(func){
 		this.attachEvent("onBeforeDataSending",func);
 	},
 
@@ -6115,19 +6139,19 @@ dataProcessor.prototype={
 	*/
 	setAutoUpdate: function(interval, user) {
 		interval = interval || 2000;
-		
+
 		this._user = user || (new Date()).valueOf();
 		this._need_update = false;
 		this._loader = null;
 		this._update_busy = false;
-		
+
 		this.attachEvent("onAfterUpdate",function(sid,action,tid,xml_node){
 			this.afterAutoUpdate(sid, action, tid, xml_node);
 		});
 		this.attachEvent("onFullSync",function(){
 			this.fullSync();
 		});
-		
+
 		var self = this;
 		window.setInterval(function(){
 			self.loadUpdate();
@@ -6164,13 +6188,13 @@ dataProcessor.prototype={
 	/*! sends query to the server and call callback function
 	*/
 	getUpdates: function(url,callback){
-		if (this._update_busy) 
+		if (this._update_busy)
 			return false;
 		else
 			this._update_busy = true;
-		
+
 		this._loader = this._loader || new dtmlXMLLoaderObject(true);
-		
+
 		this._loader.async=true;
 		this._loader.waitCall=callback;
 		this._loader.loadXML(url);
@@ -6210,11 +6234,11 @@ dataProcessor.prototype={
 		this.getUpdates(url, function(){
 			var vers = self._loader.doXPath("//userdata");
 			self.obj.setUserData(0,"version",self._v(vers[0]));
-			
+
 			var upds = self._loader.doXPath("//update");
 			if (upds.length){
 				self._silent_mode = true;
-				
+
 				for (var i=0; i<upds.length; i++) {
 					var status = upds[i].getAttribute('status');
 					var id = upds[i].getAttribute('id');
@@ -6231,10 +6255,10 @@ dataProcessor.prototype={
 							break;
 					}
 				}
-				
+
 				self._silent_mode = false;
 			}
-			
+
 			self._update_busy = false;
 			self = null;
 		});
@@ -6263,7 +6287,7 @@ gantt.init = function(node, from, to){
 		this.config.end_date = this._max_date = new Date(to);
 	}
 	this._init_skin();
-	
+
     if (!this.config.scroll_size)
         this.config.scroll_size = this._detectScrollSize();
 
@@ -6275,10 +6299,10 @@ gantt.init = function(node, from, to){
 
 
 	//can be called only once
-	this.init = function(node){ 
+	this.init = function(node){
         if (this.$container)
             this.$container.innerHTML = "";
-        this._reinit(node); 
+        this._reinit(node);
     };
 	this.callEvent("onGanttReady", []);
 
@@ -6286,18 +6310,26 @@ gantt.init = function(node, from, to){
 
 gantt._reinit = function(node){
     this._init_html_area(node);
-    this._set_sizes();
+    //this._render_grid_header();
+    //this._set_sizes();
 
     this._task_area_pulls = {};
     this._task_area_renderers = {};
 
     this._init_touch_events();
     this._init_templates();
+
+
+    this._init_grid();
+    this._render_grid();
+
     this._init_grid();
     this._init_tasks();
 
-    this.render();
 
+    this.render(true);
+
+    //console.log(this.$container)
     dhtmlxEvent(this.$container, "click", this._on_click);
     dhtmlxEvent(this.$container, "dblclick", this._on_dblclick);
     dhtmlxEvent(this.$container, "mousemove", this._on_mousemove);
@@ -6308,38 +6340,36 @@ gantt._reinit = function(node){
 gantt._init_html_area = function(node){
 	if (typeof node == "string")
 		this._obj = document.getElementById(node);
-	else 
+	else
 		this._obj = node;
 	dhtmlx.assert(this._obj, "Invalid html container: "+node);
 
-    var html = "<div class='gantt_container'><table class='gantt_container_table'><tr><td><table class='gantt_grid'></table></td><td><div class='gantt_task'></div></td></tr></table>";
+    var html = "<div class='gantt_container'><table class='gantt_grid'></table></td>";
     html += "<div class='gantt_ver_scroll'><div></div></div><div class='gantt_hor_scroll'><div></div></div></div>";
 	this._obj.innerHTML = html;
 	//store linsk for further reference
     this.$container = this._obj.firstChild;
 
-    var childs_one = this.$container.firstChild.firstChild.firstChild.childNodes;
-    var childs_two = this.$container.childNodes;
+    var childs = this.$container.childNodes;
 
-	this.$grid = childs_one[0].firstChild;
-	this.$task = childs_one[1].firstChild;
-    this.$scroll_ver = childs_two[1];
-    this.$scroll_hor = childs_two[2];
+	this.$grid = childs[0];
+
+    this.$scroll_ver = childs[1];
+    this.$scroll_hor = childs[2];
 
     //this.$grid.innerHTML = "<tr class='gantt_grid_scale'></tr><div class='gantt_grid_data'></div>";
     this.$grid.innerHTML = "<thead><tr class='gantt_grid_scale'></tr></thead><tbody class='gantt_grid_data'></tbody>"
     this.$grid_scale = this.$grid.childNodes[0];
     this.$grid_data = this.$grid.childNodes[1];
-
-	this.$task.innerHTML = "<div class='gantt_task_scale'></div><div class='gantt_data_area'><div class='gantt_task_bg'></div><div class='gantt_links_area'></div><div class='gantt_bars_area'></div></div>";
-	this.$task_scale = this.$task.childNodes[0];
-
-	this.$task_data = this.$task.childNodes[1];
-    //console.log(this.$task_data)
-
-	this.$task_bg = this.$task_data.childNodes[0];
-	this.$task_links = this.$task_data.childNodes[1];
-	this.$task_bars = this.$task_data.childNodes[2];
+    //alert(123)
+    //this._render_grid_header()
+    //this.$task = childs[0];
+    //this.$task.innerHTML = "<div class='gantt_task_scale'></div><div class='gantt_data_area'><div class='gantt_task_bg'></div><div class='gantt_links_area'></div><div class='gantt_bars_area'></div></div>";
+	//this.$task_scale = this.$task.childNodes[0];
+	//this.$task_data = this.$task.childNodes[1];
+	//this.$task_bg = this.$task_data.childNodes[0];
+	//this.$task_links = this.$task_data.childNodes[1];
+	//this.$task_bars = this.$task_data.childNodes[2];
 };
 
 gantt.$click={
@@ -6393,8 +6423,11 @@ gantt._on_resize = gantt.setSizes = function(){
 };
 
 //renders self
-gantt.render = function(){
-	this._render_grid();	//grid.js
+gantt.render = function(do_not_init_grid){
+	if (! this.$task_data){
+        this._render_grid();
+    }
+    	//grid.js
 	this._render_tasks_scales()	//tasks.js
     this._render_scroll();
     this._on_resize();

@@ -3,7 +3,7 @@
 - content_for :header_tags do
   = javascript_include_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
   = javascript_include_tag 'locale_ru', :plugin => :redmine_advanced_gantt
-  = javascript_include_tag 'dhtmlxgantt_tooltip', :plugin => :redmine_advanced_gantt
+  - javascript_include_tag 'dhtmlxgantt_tooltip', :plugin => :redmine_advanced_gantt
   - javascript_include_tag 'dhtmlxgantt_quick_info', :plugin => :redmine_advanced_gantt
   = javascript_include_tag 'colResizable-1.3.min.js', :plugin => :redmine_advanced_gantt
   = javascript_include_tag 'gantt', :plugin => :redmine_advanced_gantt
