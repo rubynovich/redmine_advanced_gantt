@@ -235,5 +235,23 @@ html{
     overflow-x: hidden;
 }
 
+.gantt_tooltip{
+    font-weight: normal;
+    text-align: left;
+}
+
+.check_column{
+    display: inline-block;
+}
+
+.private {
+    background: none repeat scroll 0 0 #FF0000;
+    border-radius: 4px 4px 4px 4px;
+    color: #FFFFFF;
+    font-weight: bold;
+    margin-right: 2px;
+    padding: 2px;
+}
+
 
 

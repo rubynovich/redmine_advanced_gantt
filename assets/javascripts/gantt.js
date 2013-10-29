@@ -6,6 +6,44 @@
  * To change this template use File | Settings | File Templates.
  */
 
+
+function in_array (needle, haystack, argStrict) {
+    // http://kevin.vanzonneveld.net
+    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+    // +   improved by: vlado houba
+    // +   input by: Billy
+    // +   bugfixed by: Brett Zamir (http://brett-zamir.me)
+    // *     example 1: in_array('van', ['Kevin', 'van', 'Zonneveld']);
+    // *     returns 1: true
+    // *     example 2: in_array('vlado', {0: 'Kevin', vlado: 'van', 1: 'Zonneveld'});
+    // *     returns 2: false
+    // *     example 3: in_array(1, ['1', '2', '3']);
+    // *     returns 3: true
+    // *     example 3: in_array(1, ['1', '2', '3'], false);
+    // *     returns 3: true
+    // *     example 4: in_array(1, ['1', '2', '3'], true);
+    // *     returns 4: false
+    var key = '',
+        strict = !! argStrict;
+
+    if (strict) {
+        for (key in haystack) {
+            if (haystack[key] === needle) {
+                return true;
+            }
+        }
+    } else {
+        for (key in haystack) {
+            if (haystack[key] == needle) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
 var scale_gantt = function(value){
     switch(value){
         /*case "week":
@@ -97,6 +135,30 @@ function after_render_gantt(){
 }
 
 $(document).ready(function(){
+
+    /*$(document).on('click', '.check_column input[type="checkbox"]', function(){
+        var uncheckeds = $('.check_column input:not(:checked)')
+        var names = []
+        uncheckeds.each(function(i, el){
+            names.push($(el).attr('name').replace('columns[','').replace(']',''))
+            //console.log()
+            //console.log($(el).attr('name'))
+        })
+        hidden_columns = names;
+        gantt.config.columns = []
+        $.each(columns_hash, function(key, value) {
+            if (! in_array(key, hidden_columns)){
+                gantt.config.columns.push(value)
+            }
+        })
+        //gantt.init("gantt_here");
+        //gantt.render()
+        //console.log(names)
+        gantt._render_grid();
+        gantt.render();
+
+    }) */
+
     gantt.attachEvent("onBeforeTaskDisplay", function(id, task){
         if (gantt_filter)
             if (task.priority != gantt_filter)
@@ -230,20 +292,19 @@ $(document).ready(function(){
     gantt.config.scale_height = 35;
     gantt.config.link_arrow_size = 8;
 
-    var columns_hash = {
-       "text": {name:"text", label:"Задачи",  tree:true, width:200, align: 'left' },
-       "start_date": {name: 'start_date', label: 'Начало', width: 70, align: 'center'},
-       "end_date": {name: 'end_date', label: 'Окончание', width: 70, align: 'center'}
-    }
-
 
 
     gantt.config.columns = []
 
-    $.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
+    //console.log(hidden_columns)
+
+    $.each(columns_hash, function(key, value) {
+        if (! in_array(key, hidden_columns)){
+          gantt.config.columns.push(value)
+        }
+    })
 
 
-    console.log(gantt.config.columns)
 
 
 

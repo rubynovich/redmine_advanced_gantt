@@ -17,6 +17,9 @@ class AdvancedGanttProjectController < ApplicationController
 
   def index
     #@data_gantt[0][:count_items] = @data_gantt.count if @data_gantt[0].is_a?(Hash)
+    setup_columns
+    @columns = params[:columns] || get_visibled
+    @hidden_columns = get_hidden_columns
     @gantt = Redmine::Helpers::Gantt.new(params)
     @gantt.project = @project
     #params[:f] = []
@@ -79,7 +82,8 @@ class AdvancedGanttProjectController < ApplicationController
         #min_end_date: project.decorate.end_at,
         start_date: project.decorate.start_at,
         duration: project.decorate.duration,
-        scale_height: 20
+        scale_height: 20,
+        closed_on: "", priority_name: "", estimated_hours: "", is_critical: ""
     }
     item[:parent] = "p#{project.parent.id}" if project.parent.present?
 
@@ -108,8 +112,8 @@ class AdvancedGanttProjectController < ApplicationController
       item = {
           id: "i#{issue.id}#{add_version}",
           priority: issue.level+issue.project.level+1,
-          #id: issue.id,
-          text: view_context.link_to_issue(issue),
+          priority_name: issue.priority.try(:name),
+          text: "#{l(:label_gantt_is_private) if issue.is_private}#{view_context.link_to_issue(issue)}".html_safe,
           avatar: assign_avatar,
           assign_to: issue.assigned_to.try(:id),
           rightside_text: view_context.link_to_issue(issue),
@@ -117,13 +121,16 @@ class AdvancedGanttProjectController < ApplicationController
           #parent: issue.parent.nil? ? issue.project.id : issue.parent.id,
           issue: 1,
           open: true,
-          closed_on: issue.closed_on,
+          closed_on: issue.closed_on.try(:strftime, "%d-%m-%Y %H:%i:%s") || "" ,
           status: issue.status_id,
           is_private: issue.is_private,
-          priority: issue.priority_id,
+          #priority: issue.priority_id,
           start_date: issue.decorate.start_at,
           duration: issue.decorate.duration,
           progress: (issue.done_ratio / 100),
+          estimated_hours: issue.estimated_hours || "",
+          is_critical: "",
+          #link_issue:
           tooltip: %{#{view_context.render_issue_tooltip(issue).html_safe}<br>
           }.html_safe
 
@@ -158,7 +165,8 @@ class AdvancedGanttProjectController < ApplicationController
           #open: version.status == 'open',#options[:level] == 1 ? 1 : 0,
           start_date: version.decorate.start_at,
           duration: version.decorate.duration,
-          progress: version.completed_percent / 100
+          progress: version.completed_percent / 100,
+          closed_on: "", priority_name: "", estimated_hours: "", is_critical: ""
       }
       @data_gantt << item
 
@@ -171,7 +179,7 @@ class AdvancedGanttProjectController < ApplicationController
     end
   end
 
-  private
+
   def sort_issues!(issues)
     issues.sort! { |a, b| gantt_issue_compare(a, b) }
   end
@@ -183,5 +191,37 @@ class AdvancedGanttProjectController < ApplicationController
       x.root_id <=> y.root_id
     end
   end
+
+  def setup_columns
+    @columns_hash = {
+        text: {name:"text", label: l(:label_gantt_text),  tree:true, width:200, align: 'left'},
+        start_date: {name: 'start_date', label: l(:label_gantt_start_date), width:70, align: 'center'},
+        end_date: {name: 'end_date', label: l(:label_gantt_end_date), width:70, align: 'center'},
+        duration: {name:'duration', label: l(:label_gantt_duration), width:70, align: 'center', visibled: false},
+        closed_on: {name:'closed_on', label: l(:label_gantt_closed_on), width:70, align: 'center', visibled: false},
+        priority_name: {name:'priority_name', label: l(:label_gantt_priority), width:70, align: 'center', visibled: false},
+        #link_issue: {name:'link_issue', label: l(:label_gantt_link_issue), width:70, align: 'center', visibled: false},
+        estimated_hours: {name:'estimated_hours', label: l(:label_gantt_estimated_hours), width:70, align: 'center', visibled: false},
+        is_critical: {name:'is_critical', label: l(:label_gantt_is_critical), width:70, align: 'center', visibled: false},
+    }
+  end
+
+  def get_visibled
+    ret = {}
+    @columns_hash.each_pair do |key, value|
+      ret[key] = "1" unless value[:visibled] === false
+    end
+    ret
+  end
+
+  def get_hidden_columns
+    keys = []
+    @columns.each_pair do |key, value|
+      keys << key if value == "1"
+    end
+    @columns_hash.keys - keys.compact.map{|k| k.to_sym}
+  end
+
+
 
 end

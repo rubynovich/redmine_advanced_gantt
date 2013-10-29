@@ -1777,7 +1777,7 @@ gantt._render_grid_item = function(item) {
         var style = "width:" + (col.width-(last ? 1 : 0)) + "px;";
         if (dhtmlx.defined(col.align))
             style += "text-align:" + col.align + ";";
-        cell = "<td class='" + css + "' style='" + style + "'>" + tree + value + "</td>";
+        cell = "<td class='" + css + "' style='" + style + "' td_column_id='"+col.name+"'>" + tree + value + "</td>";
         cells.push(cell);
     }
     var css = item.$index%2 === 0 ? "" : " odd";
