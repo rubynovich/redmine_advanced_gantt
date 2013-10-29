@@ -6,7 +6,7 @@ gem 'haml'
 gem 'haml-rails'
 
 gem 'draper'
-gem 'ruby-haml-js'
+#gem 'ruby-haml-js'
 
 #gem 'erb2haml'
 #gem 'rubyzip', '= 0.9.9'
