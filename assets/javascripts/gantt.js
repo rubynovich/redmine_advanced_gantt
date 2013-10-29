@@ -322,14 +322,18 @@ $(document).ready(function(){
         //$("table.gantt_container_table").colResizable();
         $("table.gantt_grid").colResizable({headerOnly: true, onResize: function(e){
             var columns = $(e.currentTarget).find('th.gantt_grid_head_cell');
+            var head_width = 0
             $.each(columns, function(ind, column){
                 var name = $(column).attr('column_id')
                 columns_hash[name]["width"] = parseInt(column.style.width.replace('px',''))
                 //console.log(name+':'+column.style.width)
+                head_width += columns_hash[name]["width"]
             })
             //console.log(columns_hash)
             gantt.config.columns = []
             $.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
+            gantt.config.scroll_size = gantt._detectScrollSize();
+            gantt.config.grid_width = head_width;
             gantt.setSizes();
             gantt._scroll_resize();
             //gantt.render();
@@ -355,7 +359,7 @@ $(document).ready(function(){
 
     window.gantt_print =function(template){
         //console.log(gantt.$task_bg)
-        gantt.render()
+        //gantt.render()
 
         //var printWin= open('', 'displayWindow','width=800,height=600,status=no,toolbar=no,menubar=no,scrollbars=yes');
         //printWin.focus()

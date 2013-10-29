@@ -231,5 +231,9 @@ th.gantt_task_container div.gantt_task{
     width: 100%;
 }*/
 
+html{
+    overflow-x: hidden;
+}
+
 
 
