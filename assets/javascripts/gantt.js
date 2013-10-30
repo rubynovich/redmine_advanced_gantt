@@ -402,7 +402,7 @@ $(document).ready(function(){
             })
 
             //$.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
-            console.log(gantt.config.columns)
+            //console.log(gantt.config.columns)
             gantt.config.scroll_size = gantt._detectScrollSize();
             gantt.config.grid_width = head_width;
             gantt.setSizes();
