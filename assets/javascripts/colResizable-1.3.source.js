@@ -166,7 +166,8 @@
 	* @param {bool} isOver - to identify when the function is being called from the onGripDragOver event	
 	*/
 	var syncCols = function(t,i,isOver){
-		var inc = drag.x-drag.l, c = t.c[i], c2 = t.c[i+1]; 			
+		//var inc = drag.x-drag.l, c = t.c[i], c2 = t.c[i+1];
+        var inc = drag.x-drag.l, c = t.c[i], c2 = t.c[t.c.length - 1];
 		var w = c.w + inc;	var w2= c2.w- inc;	//their new width is obtained					
 		c.width( w + PX);	c2.width(w2 + PX);	//and set	
 		t.cg.eq(i).width( w + PX); t.cg.eq(i+1).width( w2 + PX);
@@ -184,11 +185,13 @@
 		var mw = t.opt.minWidth, i = drag.i ;	//cell's min width
 		var l = t.cs*1.5 + mw + t.b;
 
-		var max = i == t.ln-1? t.w-l: t.g[i+1].position().left-t.cs-mw; //max position according to the contiguous cells
-		var min = i? t.g[i-1].position().left+t.cs+mw: l;				//min position according to the contiguous cells
+		//var max = i == t.ln-1? t.w-l: t.g[i+1].position().left-t.cs-mw; //max position according to the contiguous cells
+        var max = i == t.ln-1? t.w-l: t.g[t.g.length-1].position().left-t.cs-mw; //max position according to the contiguous cells
+
+        var min = i? t.g[i-1].position().left+t.cs+mw: l;				//min position according to the contiguous cells
 		
 		x = M.max(min, M.min(max, x));						//apply boundings		
-		drag.x = x;	 drag.css("left",  x + PX); 			//apply position increment		
+		drag.x = x;	 drag.css("left",  x + PX); 			//apply position increment
 			
 		if(t.opt.liveDrag){ 								//if liveDrag is enabled
 			syncCols(t,i); syncGrips(t);					//columns and grips are synchronized

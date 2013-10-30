@@ -57,25 +57,25 @@ var scale_gantt = function(value){
          break; */
         case "trplweek":
             gantt.config.scale_unit = "day";
-            gantt.config.date_scale = "%d %M";
+            gantt.config.date_scale = "%d %M '%y";
             gantt.config.subscales = [ ];
             gantt.config.scale_height = 35;
             break;
         case "month":
             gantt.config.scale_unit = "week";
-            gantt.config.date_scale = "Week #%W";
+            gantt.config.date_scale = "Неделя #%W (с %d %M %Y)";
             gantt.config.subscales = [
-                {unit:"day", step:1, date:"%D"}
+                {unit:"day", step:1, date:"%D (%d)"}
             ];
 
             gantt.config.scale_height = 60;
             break;
         case "year":
             gantt.config.scale_unit = "month";
-            gantt.config.date_scale = "%M";
+            gantt.config.date_scale = "%M %Y";
             gantt.config.scale_height = 60;
             gantt.config.subscales = [
-                {unit:"week", step:1, date:"#%W"}
+                {unit:"week", step:1, date:"#%W с %d"}
             ];
             break;
         case "years":
@@ -83,10 +83,22 @@ var scale_gantt = function(value){
             gantt.config.date_scale = "%Y";
             gantt.config.scale_height = 60;
             gantt.config.subscales = [
-                {unit:"month", step:1, date:"#%M"}
+                {unit:"month", step:1, date:"%M"}
             ];
             break;
     }
+
+    $('.gantt_grid_head_cell').each(function(i, el){
+        //console.log(el)
+        el.style.lineHeight = (gantt.config.scale_height - 1)+'px'
+
+    })
+
+    /*$('.gantt_grid_head_cell span').css({
+        height: (gantt.config.scale_height - 1)+'px'
+    })*/
+
+
 }
 
 $(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function(){
@@ -297,12 +309,15 @@ $(document).ready(function(){
     gantt.config.columns = []
 
     //console.log(hidden_columns)
-
+    var head_width = 0
     $.each(columns_hash, function(key, value) {
         if (! in_array(key, hidden_columns)){
           gantt.config.columns.push(value)
+          head_width += parseInt(value["width"])
         }
     })
+    gantt.config.grid_width = head_width;
+
 
 
 
@@ -327,6 +342,11 @@ $(document).ready(function(){
     gantt.config.order_branch = true;
     //gantt.config.select_task  = false;
     scale_gantt('year')
+
+
+    //for view only mode
+    gantt.config.drag_move = false;
+    gantt.config.drag_resize = false;
 
 
     gantt.attachEvent("onScaleAdjusted", function(){
@@ -383,7 +403,7 @@ $(document).ready(function(){
     gantt.load('gantt.js', function(){
         after_render_gantt();
         //$("table.gantt_container_table").colResizable();
-        $("table.gantt_grid").colResizable({headerOnly: true, onResize: function(e){
+        $("table.gantt_grid").colResizable({headerOnly: true, minWidth: 60, onResize: function(e){
             var columns = $(e.currentTarget).find('th.gantt_grid_head_cell');
             var head_width = 0
             $.each(columns, function(ind, column){

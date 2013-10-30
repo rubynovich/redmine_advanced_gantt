@@ -41,7 +41,9 @@ gantt._show_tooltip = function(text, pos) {
 	pos.x = Math.min(Math.max(scroll.x, pos.x), scroll.x+max_width - width);
 
 	tip.style.left = pos.x + "px";
-	tip.style.top  = pos.y + "px";
+	tip.style.top  = pos.y - 55 + "px";
+    $(tip).draggable();
+    //$(tip).resizable();
 };
 
 gantt._hide_tooltip = function(){

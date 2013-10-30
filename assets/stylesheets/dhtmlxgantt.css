@@ -144,7 +144,7 @@ to use it in non-GPL project. Please contact sales@dhtmlx.com for details
   height:100%;
   box-sizing:border-box;
   -moz-box-sizing:border-box;
-  line-height:33px;
+  /*line-height:33px; */
   -moz-user-select:-moz-none;
   -webkit-user-select:none;
   -user-select:none;

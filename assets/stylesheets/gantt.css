@@ -169,6 +169,10 @@ table.gantt_grid {
     background: #D6D6D6;
 }
 
+th.gantt_grid_head_cell{
+    display: table-cell;
+}
+
 
 .gantt_row{
     padding: 0px;
@@ -176,6 +180,23 @@ table.gantt_grid {
 
 .icon-print{
     background: url('/plugin_assets/redmine_advanced_gantt/images/printer.png') no-repeat left;
+}
+
+.gantt_grid_head_cell{
+    line-height: 59px;
+}
+
+.gantt_grid_head_cell span{
+    width: 100%;
+    /*height: 59px;*/
+    display:inline-block;
+    line-height: 14px;
+    white-space: normal;
+    vertical-align:middle;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 }
 
 .gantt_container{
@@ -223,6 +244,7 @@ th.gantt_task_container div.gantt_task{
     border-top: 1px solid #000;
 }
 
+
 .CRG{
  z-index: 2147483647;
 }
@@ -253,6 +275,11 @@ html{
     font-weight: bold;
     margin-right: 2px;
     padding: 2px;
+}
+
+.gantt_tooltip{
+    min-width: 300px;
+    word-wrap: break-word;
 }
 
 

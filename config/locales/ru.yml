@@ -6,7 +6,7 @@ ru:
   html_title: "Диаграмма Ганта"
   label_minimal_date: "Минимальная дата в диаграмме"
   label_print_gantt: "Диаграмма Ганта"
-  label_columns_plural: "Колонки"
+  label_columns_plural: "Дополнительная информация"
   label_gantt_text: "Задачи"
   label_gantt_start_date: "Начало"
   label_gantt_end_date: "Окончание"

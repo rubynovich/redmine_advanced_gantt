@@ -18,3 +18,10 @@ require 'concerns/decorators'
 [:project, :issue, :version, :issue_relation].each do |decorator|
   require "decorators/#{decorator}_decorator"
 end
+
+[:issue_status, :issue].each do |patch|
+  require "patches/#{patch}_patch"
+  class_eval(patch.to_s.camelize).send :include, class_eval("#{patch}_patch".camelize)
+end
+
+

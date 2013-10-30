@@ -1700,7 +1700,7 @@ gantt._render_grid_header = function() {
     var width = 0,
 		labels = this.locale.labels;
 
-    var lineHeigth = this.config.scale_height-2;
+
 
     for (var i = 0; i < columns.length; i++) {
         var last = i == columns.length-1;
@@ -1712,10 +1712,10 @@ gantt._render_grid_header = function() {
         var cssClass = "gantt_grid_head_cell" + (" gantt_grid_head_" + col.name)
 			+ (last ? " gantt_last_cell" : "") + this.templates.grid_header_class(col.name, col);
 
-        var style = "width:" + (col.width-(last?1:0)) + "px; line-height:"+(this.config.scale_height-1) + "px;";
+        var style = "width:" + (col.width-(last?1:0)) + "px; line-height:"+(this.config.scale_height - 1)+"px;";
 		var label = (col.label || labels["column_" + col.name]);
 		label = label || "";
-        var cell = "<th class='" + cssClass + "' style='" + style + "' column_id='" + col.name + "'>" + label + sort +  "</th>";
+        var cell = "<th class='" + cssClass + "' style='" + style + "' column_id='" + col.name + "'><span>" + label + sort +  "</span></th>";
         cells.push(cell);
     }
     cells.push("<th class='gantt_task_container'><div class='gantt_task'></div></th>")
@@ -7155,7 +7155,7 @@ gantt.locale = {
         minutes: "Minutes",
         hours: "Hours",
         days: "Days",
-        weeks: "Week",
+        weeks: "Неделя",
         months: "Months",
         years: "Years"
 	}
