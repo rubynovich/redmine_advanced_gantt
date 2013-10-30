@@ -238,6 +238,8 @@ html{
 .gantt_tooltip{
     font-weight: normal;
     text-align: left;
+    border-radius: 10px;
+    border: 1px solid #555555;
 }
 
 .check_column{
