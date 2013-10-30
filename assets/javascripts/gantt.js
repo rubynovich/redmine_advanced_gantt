@@ -314,9 +314,11 @@ $(document).ready(function(){
     gantt.config.tooltip_timeout = 500;
 
     gantt.config.drag_links = false;
+
     gantt.config.show_progress = true;
+
     gantt.config.drag_progress = false;
-    gantt.config.details_on_dblclick = true;
+    gantt.config.details_on_dblclick = false;
     gantt.config.lightbox.sections = [
         {name:"time", height:72, type:"duration", map_to:"auto"}
     ]
@@ -392,7 +394,15 @@ $(document).ready(function(){
             })
             //console.log(columns_hash)
             gantt.config.columns = []
-            $.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
+
+            $.each(columns_hash, function(key, value) {
+                if (! in_array(key, hidden_columns)){
+                    gantt.config.columns.push(value)
+                }
+            })
+
+            //$.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
+            console.log(gantt.config.columns)
             gantt.config.scroll_size = gantt._detectScrollSize();
             gantt.config.grid_width = head_width;
             gantt.setSizes();

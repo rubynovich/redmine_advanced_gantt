@@ -200,7 +200,7 @@ table.gantt_grid {
     vertical-align: top;
 }
 
-table..gantt_container_table, table..gantt_container_table tr, table..gantt_container_table td, table..gantt_container_table th  {
+table.gantt_container_table, table.gantt_container_table tr, table.gantt_container_table td, table.gantt_container_table th  {
     padding: 0;
 }
 
