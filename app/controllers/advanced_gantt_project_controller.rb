@@ -108,7 +108,11 @@ class AdvancedGanttProjectController < ApplicationController
     @issue_ancestors = []
     add_version = "v#{options[version.id]}" if options[:version]
     issues.each do |issue|
-      assign_avatar = "/people/avatar?id=#{issue.assigned_to.avatar.id}&size=100".html_safe if issue.assigned_to && issue.assigned_to.try(:avatar)
+      begin
+        assign_avatar = "/people/avatar?id=#{issue.assigned_to.avatar.id}&size=100".html_safe if issue.assigned_to && issue.assigned_to.try(:avatar)
+      rescue
+        assign_avatar="/plugin_assets/redmine_people/images/person.png"
+      end
       item = {
           id: "i#{issue.id}#{add_version}",
           priority: issue.level+issue.project.level+1,

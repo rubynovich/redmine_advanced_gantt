@@ -282,5 +282,17 @@ html{
     word-wrap: break-word;
 }
 
+.gantt_container{
+    overflow: visible;
+}
+
+.gantt_task_container{
+    overflow-y: visible;
+}
+
+.gantt_tooltip{
+    z-index: 9999999;
+}
+
 
 
