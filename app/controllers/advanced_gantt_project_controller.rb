@@ -58,6 +58,14 @@ class AdvancedGanttProjectController < ApplicationController
         render json: {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
         #render json: {data: @data_gantt[1..10], links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
       }
+
+      data_ids = @data_gantt.map{|item| item.try(:[],:id)}.compact
+      @data_gantt.each do |item|
+        unless data_ids.include?(item.try(:[],:parent))
+          item.delete(:parent)
+        end
+      end
+
       #format.png  { send_data(@gantt.to_image, :disposition => 'inline', :type => 'image/png', :filename => "#{basename}.png") } if @gantt.respond_to?('to_image')
       #format.pdf  { send_data(@gantt.to_pdf, :type => 'application/pdf', :filename => "#{basename}.pdf") }
     end
