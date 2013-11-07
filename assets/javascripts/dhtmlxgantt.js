@@ -1610,12 +1610,10 @@ gantt._init_grid = function() {
 
             $(this.$grid).find('th[column_id="'+column+'"] div.gantt_sort').addClass('gantt_'+sort)
 
-            //console.log($(this.$grid).find('th[column_id="'+column+'"] div.gantt_sort'))
 
 
             //this._render_grid_header();
             //var sort_div = (this._sort && column.name == this._sort.name) ? ("<div class='gantt_sort gantt_" + this._sort.direction + "'></div>") : "";
-            //console.log(sort_div)
 
 			this.sort(column, sort == "desc");
 
@@ -1725,7 +1723,6 @@ gantt._render_grid_header = function() {
     this.$grid_scale.innerHTML = cells.join("");
 
     this.$task = this.$grid_scale.firstChild.childNodes[cells.length -1].firstChild;
-    //console.log(this.$task)
     this.$task.innerHTML = "<div class='gantt_task_scale'></div><div class='gantt_data_area'><div class='gantt_task_bg'></div><div class='gantt_links_area'></div><div class='gantt_bars_area'></div></div>";
     this.$task_scale = this.$task.childNodes[0];
     this.$task_data = this.$task.childNodes[1];
@@ -3301,10 +3298,10 @@ gantt._update_layout_sizes = function(){
 gantt._init_tasks_range = function(){
 	var unit = this.config.scale_unit;
 	if(this.config.start_date && this.config.end_date){
-		this._min_date = this.date[unit + "_start"]( new Date(this.config.start_date));
-		this._max_date = this.date[unit + "_start"]( new Date(this.config.end_date));
-        this._min_date = this.date.add(this.date[unit + "_start"](this._min_date), -1, unit);
-        this._max_date = this.date.add(this._max_date, 1, unit);
+		this._min_date = this.date[unit + "_start"]( this.config.start_date);
+		this._max_date = this.date[unit + "_start"]( this.config.end_date);
+        this._min_date = this.date.add(this.date[unit + "_start"](this._min_date), -2, unit);
+        this._max_date = this.date.add(this._max_date, 2, unit);
 		return;
 	}
 
@@ -6331,7 +6328,6 @@ gantt._reinit = function(node){
 
     this.render(true);
 
-    //console.log(this.$container)
     dhtmlxEvent(this.$container, "click", this._on_click);
     dhtmlxEvent(this.$container, "dblclick", this._on_dblclick);
     dhtmlxEvent(this.$container, "mousemove", this._on_mousemove);

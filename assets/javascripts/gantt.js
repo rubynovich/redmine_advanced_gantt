@@ -89,11 +89,12 @@ var scale_gantt = function(value){
     }
 
     $('.gantt_grid_head_cell').each(function(i, el){
-        //console.log(el)
-        el.style.lineHeight = (gantt.config.scale_height - 1)+'px'
+        el.style.lineHeight = (gantt.config.scale_height - 1)+'px';
 
     })
-
+    $('.gantt_grid thead').each(function(i, el){
+        el.style.height =  (gantt.config.scale_height - 1)+'px';
+    });
     /*$('.gantt_grid_head_cell span').css({
         height: (gantt.config.scale_height - 1)+'px'
     })*/
@@ -264,7 +265,8 @@ $(document).ready(function(){
 
         if (data.start_date){
             var start_date = data.start_date.split('-')
-            gantt.config.start_date = new Date(start_date[2], start_date[1], start_date[0]);
+            gantt.config.start_date = new Date(start_date[2], start_date[1]-1, start_date[0]);
+            console.log(gantt.config.start_date);
         }
         if (data.end_date){
             var end_date = data.end_date.split('-')
@@ -451,6 +453,9 @@ $(document).ready(function(){
 
 
     $.getJSON('gantt.js', function(data){
+        if (data.console){
+            console.log(data.console);
+        }
         gantt_load(data);
     })
 

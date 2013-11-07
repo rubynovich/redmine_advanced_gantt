@@ -75,7 +75,7 @@ class AdvancedGanttProjectController < ApplicationController
           end
         end
 
-        render json: {data: @data_gantt, links: @links_hash.map{|k,v| v}, start_date: @issue_min_date.strftime("%d-%m-%Y"), end_date: @issue_max_date.strftime("%d-%m-%Y")  }
+        render json: {data: @data_gantt, links: @links_hash.map{|k,v| v}, start_date: @issue_min_date.strftime("%d-%m-%Y"), end_date: @issue_max_date.strftime("%d-%m-%Y") }
         #render json: {data: @data_gantt[1..10], links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
       }
 
