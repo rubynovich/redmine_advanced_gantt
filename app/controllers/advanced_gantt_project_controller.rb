@@ -28,6 +28,9 @@ class AdvancedGanttProjectController < ApplicationController
     @query.group_by = nil
     @gantt.query = @query if @query.valid?
 
+    @issue_min_date = Date.today + 1000.years
+    @issue_max_date = Date.today - 1000.years
+
     respond_to do |format|
       format.html {
 
@@ -62,9 +65,17 @@ class AdvancedGanttProjectController < ApplicationController
           unless data_ids.include?(item.try(:[],:parent))
             item.delete(:parent)
           end
+          if item[:project] == 1 && item[:start_date] && item[:start_date].to_date < @issue_min_date
+            unless item[:end_date]
+              item[:end_date] = (item[:start_date].to_date + item[:duration].to_i.days).strftime("%d-%m-%Y") if item[:duration]
+            end
+            item[:no_calc_min] = true
+            #item.delete(:start_date)
+            item.delete(:duration) if item[:duration]
+          end
         end
 
-        render json: {data: @data_gantt, links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
+        render json: {data: @data_gantt, links: @links_hash.map{|k,v| v}, start_date: @issue_min_date.strftime("%d-%m-%Y"), end_date: @issue_max_date.strftime("%d-%m-%Y")  }
         #render json: {data: @data_gantt[1..10], links: @links_hash.map{|k,v| v}, data_one: @data_gantt }
       }
 
@@ -151,6 +162,8 @@ class AdvancedGanttProjectController < ApplicationController
           }.html_safe
 
       }
+      @issue_min_date = issue.start_date if issue.start_date && issue.start_date < @issue_min_date
+      @issue_max_date = issue.due_date if issue.due_date && issue.due_date > @issue_max_date
       @data_gantt << item
       issue.relations.each do |relation|
         if @links_hash["id#{relation.id}"].nil?

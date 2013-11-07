@@ -3303,6 +3303,8 @@ gantt._init_tasks_range = function(){
 	if(this.config.start_date && this.config.end_date){
 		this._min_date = this.date[unit + "_start"]( new Date(this.config.start_date));
 		this._max_date = this.date[unit + "_start"]( new Date(this.config.end_date));
+        this._min_date = this.date.add(this.date[unit + "_start"](this._min_date), -1, unit);
+        this._max_date = this.date.add(this._max_date, 1, unit);
 		return;
 	}
 
@@ -3564,7 +3566,7 @@ gantt._render_pair = function(parent, css, task, content){
 };
 
 gantt._render_task_element = function(task){
-	if(!(+task.start_date < +this._max_date && +task.end_date > +this._min_date))
+    if(!(+task.start_date < +this._max_date && +task.end_date > +this._min_date))
 		return false;
 
 	var pos = this._get_task_coord(task);

@@ -252,6 +252,57 @@ $(document).ready(function(){
     }
 
 
+    function gantt_load(data){
+
+        if (data.data.length == 0){
+            $('#gantt_here').html('Нет данных для отображения');
+            $('.gantt_loader').hide()
+            $('#gantt_here').fadeIn(1000)
+
+            return
+        }
+
+        if (data.start_date){
+            var start_date = data.start_date.split('-')
+            gantt.config.start_date = new Date(start_date[2], start_date[1], start_date[0]);
+        }
+        if (data.end_date){
+            var end_date = data.end_date.split('-')
+            gantt.config.end_date = new Date(end_date[2], end_date[1], end_date[0]);
+        }
+        gantt.parse({data: data.data, links: data.links});
+        after_render_gantt();
+        //$("table.gantt_container_table").colResizable();
+        $("table.gantt_grid").colResizable({headerOnly: true, minWidth: 60, onResize: function(e){
+            var columns = $(e.currentTarget).find('th.gantt_grid_head_cell');
+            var head_width = 0
+            $.each(columns, function(ind, column){
+                var name = $(column).attr('column_id')
+                columns_hash[name]["width"] = parseInt(column.style.width.replace('px',''))
+                //console.log(name+':'+column.style.width)
+                head_width += columns_hash[name]["width"]
+            })
+            //console.log(columns_hash)
+            gantt.config.columns = []
+
+            $.each(columns_hash, function(key, value) {
+                if (! in_array(key, hidden_columns)){
+                    gantt.config.columns.push(value)
+                }
+            })
+
+            //$.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
+            //console.log(gantt.config.columns)
+            gantt.config.scroll_size = gantt._detectScrollSize();
+            gantt.config.grid_width = head_width;
+            gantt.setSizes();
+            gantt._scroll_resize();
+            //gantt.render();
+        }});
+
+
+    };
+
     //gantt.config.details_on_create = false;
 
     gantt.config.sort = true;
@@ -399,39 +450,11 @@ $(document).ready(function(){
     //$( ".gantt_grid_head_start_date" ).resizable();
 
 
-
-    gantt.load('gantt.js', function(){
-        after_render_gantt();
-        //$("table.gantt_container_table").colResizable();
-        $("table.gantt_grid").colResizable({headerOnly: true, minWidth: 60, onResize: function(e){
-            var columns = $(e.currentTarget).find('th.gantt_grid_head_cell');
-            var head_width = 0
-            $.each(columns, function(ind, column){
-                var name = $(column).attr('column_id')
-                columns_hash[name]["width"] = parseInt(column.style.width.replace('px',''))
-                //console.log(name+':'+column.style.width)
-                head_width += columns_hash[name]["width"]
-            })
-            //console.log(columns_hash)
-            gantt.config.columns = []
-
-            $.each(columns_hash, function(key, value) {
-                if (! in_array(key, hidden_columns)){
-                    gantt.config.columns.push(value)
-                }
-            })
-
-            //$.each(columns_hash, function(key, value) { gantt.config.columns.push(value) })
-            //console.log(gantt.config.columns)
-            gantt.config.scroll_size = gantt._detectScrollSize();
-            gantt.config.grid_width = head_width;
-            gantt.setSizes();
-            gantt._scroll_resize();
-            //gantt.render();
-        }});
+    $.getJSON('gantt.js', function(data){
+        gantt_load(data);
+    })
 
 
-    });
 
     $(document).on('click', '.gantt_tree_content a, .gantt_tooltip a, .gantt_tree_icon.gantt_tree_avatar img', function(e){
         e.preventDefault();

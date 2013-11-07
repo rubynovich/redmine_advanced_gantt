@@ -294,5 +294,9 @@ html{
     z-index: 9999999;
 }
 
+#ui-datepicker-div{
+    z-index: 999999 !important;
+}
+
 
 
