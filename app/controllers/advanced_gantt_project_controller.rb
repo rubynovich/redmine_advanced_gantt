@@ -92,7 +92,7 @@ class AdvancedGanttProjectController < ApplicationController
 
     item = {
         id: "p#{project.id}",
-        text: view_context.link_to_project(project).gsub('<br>',' ').html_safe,
+	text: view_context.link_to_project(project).gsub(/<br\s*\/?>/, '').html_safe,
         project:1,
         priority: 0,
         #priority: project.level,
@@ -140,7 +140,7 @@ class AdvancedGanttProjectController < ApplicationController
           id: "i#{issue.id}#{add_version}",
           priority: issue.level+issue.project.level+1,
           priority_name: issue.priority.try(:name),
-          text: "#{l(:label_gantt_is_private) if issue.is_private}#{view_context.link_to_issue(issue).gsub('<br>',' ')}".html_safe,
+          text: "#{l(:label_gantt_is_private) if issue.is_private}#{view_context.link_to_issue(issue).gsub(/<br\s*\/?>/, '')}".html_safe,
           avatar: assign_avatar,
           assign_to: issue.assigned_to.try(:id),
           rightside_text: view_context.link_to_issue(issue),
@@ -186,7 +186,7 @@ class AdvancedGanttProjectController < ApplicationController
       #label = h("#{version.project} -") + label unless @project && @project == version.project
       item = {
           id: "v#{version}",
-          text: view_context.link_to_version(version).gsub('<br>',' ').html_safe,
+          text: view_context.link_to_version(version).gsub(/<br\s*\/?>/, '').html_safe,
           version:1,
           parent: "p#{project.id}",
           open: true,
