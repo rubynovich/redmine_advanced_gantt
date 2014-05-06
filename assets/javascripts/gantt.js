@@ -147,7 +147,9 @@ function after_render_gantt(){
 
 }
 
-$(document).ready(function(){
+
+
+var ready = function(){
 
     /*$(document).on('click', '.check_column input[type="checkbox"]', function(){
         var uncheckeds = $('.check_column input:not(:checked)')
@@ -487,4 +489,17 @@ $(document).ready(function(){
 
 
 
-})
+};
+
+
+$(document).on('page:load', function () {
+    ready();
+});
+
+$(document).on('page:restore', function () {
+    ready();
+});
+
+$(document).ready(function(){
+    ready();
+});
