@@ -102,12 +102,6 @@ var scale_gantt = function(value){
 
 }
 
-$(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function(){
-
-    var node = this
-    scale_gantt(node.value)
-    gantt.render();
-})
 
 function simple_tooltip(target_items, name){
     $(target_items).each(function(i){
@@ -150,6 +144,14 @@ function after_render_gantt(){
 
 
 var ready = function(){
+
+    $(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function(){
+
+        var node = this
+        scale_gantt(node.value)
+        gantt.render();
+    })
+
 
     /*$(document).on('click', '.check_column input[type="checkbox"]', function(){
         var uncheckeds = $('.check_column input:not(:checked)')
@@ -494,10 +496,17 @@ var ready = function(){
 
 $(document).on('page:load', function () {
     ready();
+    console.log('page:load');
 });
 
 $(document).on('page:restore', function () {
     ready();
+    console.log('page:restore');
+});
+
+$(document).on('page:change', function () {
+    ready();
+    console.log('page:change');
 });
 
 $(document).ready(function(){
