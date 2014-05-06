@@ -144,7 +144,7 @@ function after_render_gantt(){
 
 
 var ready = function(){
-
+    window.gantt_init_me = false
     $(document).on('click', '.gantt-zoom-tasks-inputs input[type="radio"]', function(){
 
         var node = this
@@ -494,21 +494,9 @@ var ready = function(){
 };
 
 
-$(document).on('page:load', function () {
-    ready();
-    console.log('page:load');
-});
-
-$(document).on('page:restore', function () {
-    ready();
-    console.log('page:restore');
-});
-
-$(document).on('page:change', function () {
-    ready();
-    console.log('page:change');
-});
 
 $(document).ready(function(){
     ready();
 });
+
+

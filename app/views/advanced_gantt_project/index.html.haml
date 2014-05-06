@@ -19,6 +19,7 @@
 
 
 :javascript
+  window.gantt_init_me = true;
   var columns_hash =#{@columns_hash.to_json}
   var hidden_columns =#{@hidden_columns.to_json}
   var print_template='#{ escape_javascript(render(partial: 'print')) }'
