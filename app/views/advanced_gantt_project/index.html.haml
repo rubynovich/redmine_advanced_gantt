@@ -1,17 +1,16 @@
 - html_title l("html_title")
 - @gantt.view = self
 - content_for :header_tags do
-  = javascript_include_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
-  = javascript_include_tag 'locale_ru', :plugin => :redmine_advanced_gantt
-  = javascript_include_tag 'dhtmlxgantt_tooltip', :plugin => :redmine_advanced_gantt
-  - javascript_include_tag 'dhtmlxgantt_quick_info', :plugin => :redmine_advanced_gantt
-  = javascript_include_tag 'colResizable-1.3.source.js', :plugin => :redmine_advanced_gantt
-  = javascript_include_tag 'gantt', :plugin => :redmine_advanced_gantt
+  = javascript_include_tag 'dhtmlxgantt', :plugin_mirror => :redmine_advanced_gantt
+  = javascript_include_tag 'locale_ru', :plugin_mirror => :redmine_advanced_gantt
+  = javascript_include_tag 'dhtmlxgantt_tooltip', :plugin_mirror => :redmine_advanced_gantt
+  - javascript_include_tag 'dhtmlxgantt_quick_info', :plugin_mirror => :redmine_advanced_gantt
+  = javascript_include_tag 'colResizable-1.3.source.js', :plugin_mirror => :redmine_advanced_gantt
+  = javascript_include_tag 'gantt', :plugin_mirror => :redmine_advanced_gantt
 
-  = stylesheet_link_tag 'dhtmlxgantt', :plugin => :redmine_advanced_gantt
-  = stylesheet_link_tag 'dhtmlxgantt_broadway', :plugin => :redmine_advanced_gantt
-  = stylesheet_link_tag 'gantt', :plugin => :redmine_advanced_gantt
-
+  = stylesheet_link_tag 'dhtmlxgantt', :plugin_mirror => :redmine_advanced_gantt
+  = stylesheet_link_tag 'dhtmlxgantt_broadway', :plugin_mirror => :redmine_advanced_gantt
+  = stylesheet_link_tag 'gantt', :plugin_mirror => :redmine_advanced_gantt
   = include_gon
   = csrf_meta_tag
 %h2= l(:label_gantt)

@@ -496,7 +496,10 @@ var ready = function(){
 
 
 $(document).ready(function(){
-    ready();
+    if ($('#gantt_here')){
+        ready();
+    }
+
 });
 
 

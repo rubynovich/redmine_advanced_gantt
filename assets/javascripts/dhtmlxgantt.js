@@ -6340,7 +6340,7 @@ gantt._init_html_area = function(node){
 		this._obj = document.getElementById(node);
 	else
 		this._obj = node;
-	dhtmlx.assert(this._obj, "Invalid html container: "+node);
+	//dhtmlx.assert(this._obj, "Invalid html container: "+node);
 
     var html = "<div class='gantt_container'><table class='gantt_grid'></table></td>";
     html += "<div class='gantt_ver_scroll'><div></div></div><div class='gantt_hor_scroll'><div></div></div></div>";
