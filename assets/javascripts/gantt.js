@@ -500,6 +500,8 @@ $(document).ready(function(){
         ready();
     }
 
+    $('a').attr('data-no-turbolink','true');
+
 });
 
 
