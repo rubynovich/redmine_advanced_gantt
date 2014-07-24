@@ -6462,7 +6462,7 @@ gantt._render_scroll = function() {
         self.$scroll_ver.scrollTop = self.$grid_data.scrollTop = top;
     });
 
-    dhtmlxEvent(this.$container, "mousewheel", function(e){
+    /*dhtmlxEvent(this.$container, "mousewheel", function(e){
         if (e.wheelDeltaX){
             var dir  = e.wheelDeltaX/-40;
             var left = self.$task.scrollLeft+dir*30;
@@ -6482,7 +6482,7 @@ gantt._render_scroll = function() {
             e.preventDefault();
         e.cancelBubble=true;
         return false;
-    });
+    });*/
 
     this._render_scroll = this._scroll_resize;
 };
