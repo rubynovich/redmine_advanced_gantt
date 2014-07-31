@@ -17,3 +17,4 @@ ru:
   label_gantt_estimated_hours: "Оценка времени"
   label_gantt_is_critical: "Влияние на проект"
   label_gantt_is_private: "Частная"
+  label_gantt: "Диаграмма Ганта (старая)"
