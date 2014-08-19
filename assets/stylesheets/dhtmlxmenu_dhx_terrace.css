@@ -268,7 +268,6 @@ div.dhtmlxMenu_dhx_terrace_SubLevelArea_ArrowUp_Over,
 div.dhtmlxMenu_dhx_terrace_SubLevelArea_ArrowUp_Disabled {
 	position: absolute;
 	height: 16px;
-	height= 18px;
 	padding: 1px 1px 0px 1px;
 	font-size: 1px;
 	background-color: #eaf2fb;
@@ -284,7 +283,6 @@ div.dhtmlxMenu_dhx_terrace_SubLevelArea_ArrowDown_Over,
 div.dhtmlxMenu_dhx_terrace_SubLevelArea_ArrowDown_Disabled {
 	position: absolute;
 	height: 16px;
-	height= 18px;
 	font-size: 1px;
 	padding: 1px 1px 0px 1px;
 	background-color: #eaf2fb;
